@@ -74,24 +74,22 @@ async function connectToWhatsApp() {
       output: process.stdout,
     });
 
-    logCuy(
-      "Halo sepertinya kamu belum login, Mau login wangsaf pakai pairing code?\nSilahkan balas dengan (y/n)\nketik y untuk setuju atau ketik n untuk login menggunakan qrcode",
-      "cyan"
-    ); // pesan untuk yang menggunakan panel
+    console.log("\n==================== PAIRING SETUP ====================".cyan.bold);
+    console.log("📱 Welcome to WhatsApp Bot Pairing Setup".yellow);
+    console.log("====================================================\n".cyan.bold);
 
     const askPairingCode = () => {
       rl.question(
-        "\nApakah kamu ingin menggunakan pairing code untuk login ke wangsaf? (y/n): "
-          .yellow.bold,
+        "Would you like to use pairing code to login? (Y/n): ".yellow.bold,
         async (answer) => {
           if (answer.toLowerCase() === "y" || answer.trim() === "") {
-            logCuy(
-              "Wokeh kalau gitu silahkan masukkan nomor wangsafmu!\ncatatan : awali dengan 62 contoh 628123456789",
-              "cyan"
-            ); // pesan untuk yang menggunakan panel
+            console.log("\n📱 Please enter your WhatsApp number:".cyan);
+            console.log("📝 Format: 62xxx (e.g., 628123456789)".yellow);
+            console.log("====================================================\n".cyan.bold);
+            
             const askWaNumber = () => {
               rl.question(
-                "\nMasukkan nomor wangsaf Anda: ".yellow.bold,
+                "Enter your WhatsApp number: ".yellow.bold,
                 async (waNumber) => {
                   if (!/^\d+$/.test(waNumber)) {
                     logCuy(
@@ -107,11 +105,15 @@ async function connectToWhatsApp() {
                     askWaNumber();
                   } else {
                     const code = await sock.requestPairingCode(waNumber);
-                    console.log(
-                      "\nCek notifikasi wangsafmu dan masukin kode login wangsaf:"
-                        .blue.bold,
-                      code.bold.red
-                    );
+                    console.log("\n==================== PAIRING CODE ====================".cyan.bold);
+                    console.log(`WhatsApp Pairing Code: ${code}`.green.bold);
+                    console.log("====================================================\n".cyan.bold);
+                    console.log("🔗 How to enter the pairing code:".yellow);
+                    console.log("1️⃣  Open WhatsApp on your phone");
+                    console.log("2️⃣  Tap Menu (⋮) > Linked Devices");
+                    console.log("3️⃣  Tap 'Link a Device'");
+                    console.log("4️⃣  Enter the pairing code shown above");
+                    console.log("\n✨ Waiting for connection...".cyan);
                     rl.close();
                   }
                 }
