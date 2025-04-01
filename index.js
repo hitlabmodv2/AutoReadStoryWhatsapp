@@ -87,16 +87,6 @@ async function connectToWhatsApp() {
             console.log("\n📱 Please enter your WhatsApp number:".cyan);
             console.log("📝 Format: 62xxx (e.g., 628123456789)".yellow);
             console.log("====================================================\n".cyan.bold);
-            
-            // Delete existing sessions folder if it exists
-            if (fs.existsSync("sessions")) {
-              fs.rmdirSync("sessions", { recursive: true });
-              console.log("\n📁 Folder sesi dihapus di:".cyan, process.cwd() + "/sessions");
-            }
-            
-            // Create new sessions folder
-            fs.mkdirSync("sessions", { recursive: true });
-            console.log("📁 Folder sesi dibuat di:".cyan, process.cwd() + "/sessions\n");
 
             const askWaNumber = () => {
               rl.question(
@@ -115,6 +105,16 @@ async function connectToWhatsApp() {
                     );
                     askWaNumber();
                   } else {
+                    // Delete existing sessions folder if it exists
+                    if (fs.existsSync("sessions")) {
+                      fs.rmdirSync("sessions", { recursive: true });
+                      console.log("\n📁 Folder sesi dihapus di:".cyan, process.cwd() + "/sessions");
+                    }
+                    
+                    // Create new sessions folder
+                    fs.mkdirSync("sessions", { recursive: true });
+                    console.log("📁 Folder sesi dibuat di:".cyan, process.cwd() + "/sessions\n");
+
                     const code = await sock.requestPairingCode(waNumber);
                     console.log("\n==================== PAIRING CODE ====================".cyan.bold);
                     console.log(`WhatsApp Pairing Code: ${code}`.green.bold);
