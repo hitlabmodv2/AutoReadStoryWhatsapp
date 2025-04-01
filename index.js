@@ -10,6 +10,9 @@ const pino = require("pino");
 const readline = require("readline");
 const fs = require("fs");
 const path = require("path");
+
+let connectionAttempts = 0;
+
 const colors = require("colors");
 const moment = require("moment-timezone");
 
@@ -150,7 +153,6 @@ async function connectToWhatsApp() {
     askPairingCode();
   }
 
-  let connectionAttempts = 0;
   sock.ev.on("connection.update", async (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === "close") {
