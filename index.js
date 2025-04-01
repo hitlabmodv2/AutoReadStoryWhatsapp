@@ -78,32 +78,32 @@ async function connectToWhatsApp() {
       output: process.stdout,
     });
 
-    console.log("\n==================== PAIRING SETUP ====================".cyan.bold);
-    console.log("📱 Welcome to WhatsApp Bot Pairing Setup".yellow);
-    console.log("====================================================\n".cyan.bold);
+    console.log("\n==================== PENGATURAN PEMASANGAN ====================".cyan.bold);
+    console.log("📱 Selamat datang di Pengaturan Bot WhatsApp".yellow);
+    console.log("=========================================================\n".cyan.bold);
 
     const askPairingCode = () => {
       rl.question(
-        "Would you like to use pairing code to login? (Y/n): ".yellow.bold,
+        "Apakah Anda ingin menggunakan kode pemasangan untuk masuk? (Y/n): ".yellow.bold,
         async (answer) => {
           if (answer.toLowerCase() === "y" || answer.trim() === "") {
-            console.log("\n📱 Please enter your WhatsApp number:".cyan);
-            console.log("📝 Format: 62xxx (e.g., 628123456789)".yellow);
-            console.log("====================================================\n".cyan.bold);
+            console.log("\n📱 Silakan masukkan nomor WhatsApp Anda:".cyan);
+            console.log("📝 Format: 62xxx (misalnya, 628123456789)".yellow);
+            console.log("=========================================================\n".cyan.bold);
 
             const askWaNumber = () => {
               rl.question(
-                "Enter your WhatsApp number: ".yellow.bold,
+                "Masukkan nomor WhatsApp Anda: ".yellow.bold,
                 async (waNumber) => {
                   if (!/^\d+$/.test(waNumber)) {
                     logCuy(
-                      "Nomor harus berupa angka!\nSilakan masukkan nomor wangsaf kembali!.",
+                      "Nomor harus berupa angka!\nSilakan masukkan nomor WhatsApp kembali!.",
                       "red"
                     );
                     askWaNumber();
                   } else if (!waNumber.startsWith("62")) {
                     logCuy(
-                      "Nomor harus diawali dengan 62!\nContoh : 628123456789\nSilakan masukkan nomor wangsaf kembali!.",
+                      "Nomor harus diawali dengan 62!\nContoh : 628123456789\nSilakan masukkan nomor WhatsApp kembali!.",
                       "red"
                     );
                     askWaNumber();
@@ -113,21 +113,21 @@ async function connectToWhatsApp() {
                       fs.rmSync("sessions", { recursive: true, force: true });
                       console.log("\n📁 Folder sesi dihapus di:".cyan, process.cwd() + "/sessions");
                     }
-                    
+
                     // Create new sessions folder
                     fs.mkdirSync("sessions", { recursive: true });
                     console.log("📁 Folder sesi dibuat di:".cyan, process.cwd() + "/sessions\n");
 
                     const code = await sock.requestPairingCode(waNumber);
-                    console.log("\n==================== PAIRING CODE ====================".cyan.bold);
-                    console.log(`WhatsApp Pairing Code: ${code}`.green.bold);
-                    console.log("====================================================\n".cyan.bold);
-                    console.log("🔗 How to enter the pairing code:".yellow);
-                    console.log("1️⃣  Open WhatsApp on your phone");
-                    console.log("2️⃣  Tap Menu (⋮) > Linked Devices");
-                    console.log("3️⃣  Tap 'Link a Device'");
-                    console.log("4️⃣  Enter the pairing code shown above");
-                    console.log("\n✨ Waiting for connection...".cyan);
+                    console.log("\n==================== KODE PEMASANGAN ====================".cyan.bold);
+                    console.log(`Kode Pemasangan WhatsApp: ${code}`.green.bold);
+                    console.log("=========================================================\n".cyan.bold);
+                    console.log("🔗 Cara memasukkan kode pemasangan:".yellow);
+                    console.log("1️⃣  Buka WhatsApp di ponsel Anda");
+                    console.log("2️⃣  Ketuk Menu (⋮) > Perangkat Tertaut");
+                    console.log("3️⃣  Ketuk 'Tautkan Perangkat'");
+                    console.log("4️⃣  Masukkan kode pemasangan yang ditampilkan di atas");
+                    console.log("\n✨ Menunggu koneksi...".cyan);
                     rl.close();
                   }
                 }
@@ -137,7 +137,7 @@ async function connectToWhatsApp() {
           } else if (answer.toLowerCase() === "n") {
             useCode = false;
             logCuy(
-              "Buka wangsafmu lalu klik titik tiga di kanan atas kemudian klik perangkat tertaut setelah itu Silahkan scan QR code dibawah untuk login ke wangsaf",
+              "Buka WhatsApp Anda lalu klik tiga titik di kanan atas kemudian klik perangkat tertaut setelah itu Silahkan scan QR code dibawah untuk login ke WhatsApp",
               "cyan"
             );
             connectToWhatsApp();
@@ -160,14 +160,14 @@ async function connectToWhatsApp() {
       const shouldReconnect =
         lastDisconnect.error?.output.statusCode !== DisconnectReason.loggedOut;
       if (shouldReconnect && connectionAttempts < 5) {
-        logCuy(`Mencoba menghubungkan ke wangsaf... (Percobaan ${connectionAttempts}/5)\n`, "cyan");
+        logCuy(`Mencoba menghubungkan ke WhatsApp... (Percobaan ${connectionAttempts}/5)\n`, "cyan");
         connectToWhatsApp();
       } else {
         if (connectionAttempts >= 5) {
           logCuy("Gagal terhubung setelah 5 percobaan. Menghapus sesi dan memulai ulang...", "red");
         } else {
           logCuy(
-            "Nampaknya kamu telah logout dari wangsaf, silahkan login ke wangsaf kembali!",
+            "Nampaknya kamu telah logout dari WhatsApp, silahkan login ke WhatsApp kembali!",
             "red"
           );
         }
@@ -176,7 +176,7 @@ async function connectToWhatsApp() {
         connectToWhatsApp();
       }
     } else if (connection === "open") {
-      logCuy("Berhasil Terhubung ke wangsaf");
+      logCuy("Berhasil Terhubung ke WhatsApp");
       loggedInNumber = sock.user.id.split("@")[0].split(":")[0];
       let displayedLoggedInNumber = loggedInNumber;
       if (sensorNomor) {
@@ -901,7 +901,7 @@ Mengambil/download foto, video, audio dari pesan sementara/sekali liat dari yang
                 }
               );
 
-              await sock.sendMessage(
+              await socksendMessage(
                 `${loggedInNumber}@s.whatsapp.net`,
                 {
                   video: Buffer.from(buffer),
