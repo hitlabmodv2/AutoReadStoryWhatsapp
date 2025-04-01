@@ -43,6 +43,7 @@ let {
   blackList,
   whiteList,
   emojis,
+  autoTypingStatus = false, // Added autoTypingStatus to config
 } = config;
 
 const updateConfig = (key, value) => {
@@ -197,6 +198,7 @@ info status fitur:
 - Sensor Nomor: ${sensorNomor ? "*Aktif*" : "*Nonaktif*"}
 - Anti Telpon: ${antiTelpon ? "*Aktif*" : "*Nonaktif*"}
 - Auto Kick tag Story: ${autoKickStory ? "*Aktif*" : "*Nonaktif*"}
+- Auto Typing: ${autoTypingStatus ? "*Aktif*" : "*Nonaktif*"}
 
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
@@ -231,6 +233,9 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0];
     if (!msg.message) return;
+
+    const { handleAutoTyping } = require('./FITUR_WILY/AutoTyping.js');
+    await handleAutoTyping(sock, msg, config);
 
     const { handleStatusUpdate } = require('./FITUR_WILY/CodeAutoReadStory.js');
     await handleStatusUpdate(sock, msg, {
@@ -332,7 +337,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
             ? await sock.sendMessage(
                 `${loggedInNumber}@s.whatsapp.net`,
                 {
-                  text: `mana argumennya ?\ncontoh ketik : \`#on autolike\`\n\nArgumen yang tersedia:\n\n\`#on autoread\`\nuntuk mengaktifkan fitur autoread story\n\n\`#on autolike\`\nuntuk mengaktifkan fitur autolike story\n\n\`#on dlmedia\`\nuntuk mengaktifkan fitur download media(foto,video, dan audio) dari story\n\n\`#on sensornomor\`\nuntuk mengaktifkan sensor nomor\n\n\`#on antitelpon\`\nuntuk mengaktifkan anti-telpon\n\n\`#on kickstory\`\nuntuk mengaktifkan auto kick story grup`,
+                  text: `mana argumennya ?\ncontoh ketik : \`#on autolike\`\n\nArgumen yang tersedia:\n\n\`#on autoread\`\nuntuk mengaktifkan fitur autoread story\n\n\`#on autolike\`\nuntuk mengaktifkan fitur autolike story\n\n\`#on dlmedia\`\nuntuk mengaktifkan fitur download media(foto,video, dan audio) dari story\n\n\`#on sensornomor\`\nuntuk mengaktifkan sensor nomor\n\n\`#on antitelpon\`\nuntuk mengaktifkan anti-telpon\n\n\`#on kickstory\`\nuntuk mengaktifkan auto kick story grup\n\n\`#on autotyping\`\nuntuk mengaktifkan fitur auto typing`,
                 },
                 { quoted: msg }
               )
@@ -404,11 +409,21 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                       { quoted: msg }
                     );
                     break;
+                  case "autotyping":
+                    autoTypingStatus = true;
+                    updateConfig("autoTypingStatus", true);
+                    logCuy("Kamu mengaktifkan fitur Auto Typing", "blue");
+                    await sock.sendMessage(
+                      `${loggedInNumber}@s.whatsapp.net`,
+                      { text: "Auto Typing aktif" },
+                      { quoted: msg }
+                    );
+                    break;
                   default:
                     await sock.sendMessage(
                       `${loggedInNumber}@s.whatsapp.net`,
                       {
-                        text: `Argumen tidak valid: ${arg}. Pilihan yang tersedia: autoread, autolike, dlmedia, sensornomor, kickstory dan antitelpon`,
+                        text: `Argumen tidak valid: ${arg}. Pilihan yang tersedia: autoread, autolike, dlmedia, sensornomor, kickstory, antitelpon dan autotyping`,
                       },
                       { quoted: msg }
                     );
@@ -421,7 +436,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
             ? await sock.sendMessage(
                 `${loggedInNumber}@s.whatsapp.net`,
                 {
-                  text: `mana argumennya ?\ncontoh ketik : \`#off autolike\`\n\nArgumen yang tersedia:\n\n\`#off autoread\`\nuntuk menonaktifkan fitur autoread story\n\n\`#off autolike\`\nuntuk menonaktifkan fitur autolike story\n\n\`#off dlmedia\`\nuntuk menonaktifkan fitur download media(foto,video, dan audio) dari story\n\n\`#off sensornomor\`\nuntuk menonaktifkan sensor nomor\n\n\`#off antitelpon\`\nuntuk menonaktifkan anti-telpon\n\n\`#off kickstory\`\nuntuk menonaktifkan auto kick story grup`,
+                  text: `mana argumennya ?\ncontoh ketik : \`#off autolike\`\n\nArgumen yang tersedia:\n\n\`#off autoread\`\nuntuk menonaktifkan fitur autoread story\n\n\`#off autolike\`\nuntuk menonaktifkan fitur autolike story\n\n\`#off dlmedia\`\nuntuk menonaktifkan fitur download media(foto,video, dan audio) dari story\n\n\`#off sensornomor\`\nuntuk menonaktifkan sensor nomor\n\n\`#off antitelpon\`\nuntuk menonaktifkan anti-telpon\n\n\`#off kickstory\`\nuntuk menonaktifkan auto kick story grup\n\n\`#off autotyping\`\nuntuk menonaktifkan fitur auto typing`,
                 },
                 { quoted: msg }
               )
@@ -493,11 +508,21 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                       { quoted: msg }
                     );
                     break;
+                  case "autotyping":
+                    autoTypingStatus = false;
+                    updateConfig("autoTypingStatus", false);
+                    logCuy("Kamu mematikan fitur Auto Typing", "blue");
+                    await sock.sendMessage(
+                      `${loggedInNumber}@s.whatsapp.net`,
+                      { text: "Auto Typing nonaktif" },
+                      { quoted: msg }
+                    );
+                    break;
                   default:
                     await sock.sendMessage(
                       `${loggedInNumber}@s.whatsapp.net`,
                       {
-                        text: `Argumen tidak valid: ${arg}. Pilihan yang tersedia: autoread, autolike, dlmedia, sensornomor, kickstory dan antitelpon`,
+                        text: `Argumen tidak valid: ${arg}. Pilihan yang tersedia: autoread, autolike, dlmedia, sensornomor, kickstory, antitelpon dan autotyping`,
                       },
                       { quoted: msg }
                     );
@@ -815,6 +840,9 @@ Mengaktifkan anti telpon
 \`#on kickstory\`
 Mengaktifkan auto kick story tag grup
 
+\`#on autotyping\`
+Mengaktifkan fitur auto typing
+
 Perintah Off:
 \`#off autoread\`
 Menonaktifkan fitur autoread story
@@ -833,6 +861,9 @@ Menonaktifkan anti telpon
 
 \`#off kickstory\`
 Menonaktifkan auto kick story tag grup
+
+\`#off autotyping\`
+Menonaktifkan fitur auto typing
 
 Perintah Add:
 \`#add blacklist nomornya\`
@@ -988,7 +1019,8 @@ Mengambil/download foto, video, audio dari pesan sementara/sekali liat dari yang
 - Download Media Status: ${downloadMediaStatus ? "*Aktif*" : "*Nonaktif*"}
 - Sensor Nomor: ${sensorNomor ? "*Aktif*" : "*Nonaktif*"}
 - Anti Telpon: ${antiTelpon ? "*Aktif*" : "*Nonaktif*"}
-- Auto Kick tag Story: ${autoKickStory ? "*Aktif*" : "*Nonaktif*"}`;
+- Auto Kick tag Story: ${autoKickStory ? "*Aktif*" : "*Nonaktif*"}
+- Auto Typing: ${autoTypingStatus ? "*Aktif*" : "*Nonaktif*"}`;
 
           const formatList = (list) =>
             list
