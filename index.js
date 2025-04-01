@@ -864,6 +864,9 @@ Mengaktifkan auto kick story tag grup
 \`#on autotyping\`
 Mengaktifkan fitur auto typing
 
+\`#on autorecord\`
+Mengaktifkan fitur auto record
+
 Perintah Off:
 \`#off autoread\`
 Menonaktifkan fitur autoread story
@@ -885,6 +888,9 @@ Menonaktifkan auto kick story tag grup
 
 \`#off autotyping\`
 Menonaktifkan fitur auto typing
+
+\`#off autorecord\`
+Menonaktifkan fitur auto record
 
 Perintah Add:
 \`#add blacklist nomornya\`
