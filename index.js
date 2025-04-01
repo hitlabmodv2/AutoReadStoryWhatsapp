@@ -107,7 +107,7 @@ async function connectToWhatsApp() {
                   } else {
                     // Delete existing sessions folder if it exists
                     if (fs.existsSync("sessions")) {
-                      fs.rmdirSync("sessions", { recursive: true });
+                      fs.rmSync("sessions", { recursive: true, force: true });
                       console.log("\n📁 Folder sesi dihapus di:".cyan, process.cwd() + "/sessions");
                     }
                     
