@@ -1063,158 +1063,17 @@ Mengambil/download foto, video, audio dari pesan sementara/sekali liat dari yang
     }
 
     // status
-    if (
-      msg.key.remoteJid === "status@broadcast" &&
-      msg.key.participant !== `${loggedInNumber}@s.whatsapp.net` &&
-      autoReadStatus
-    ) {
-      let senderNumber = msg.key.participant
-        ? msg.key.participant.split("@")[0]
-        : "Tidak diketahui";
-      let displaySendernumber = senderNumber;
-      const senderName = msg.pushName || "Tidak diketahui";
-
-      if (sensorNomor && displaySendernumber !== "Tidak diketahui") {
-        displaySendernumber =
-          displaySendernumber.slice(0, 3) +
-          "****" +
-          displaySendernumber.slice(-2);
-      }
-
-      if (msg.message.protocolMessage) {
-        logCuy(
-          `Status dari ${senderName} (${displaySendernumber}) telah dihapus.`,
-          "red"
-        );
-      } else if (!msg.message.reactionMessage) {
-        if (blackList.includes(senderNumber)) {
-          logCuy(
-            `${senderName} (${displaySendernumber}) membuat status tapi karena ada di blacklist. Status tidak akan dilihat.`,
-            "yellow"
-          );
-          return;
-        }
-
-        if (whiteList.length > 0 && !whiteList.includes(senderNumber)) {
-          logCuy(
-            `${senderName} (${displaySendernumber}) membuat status tapi karena tidak ada di whitelist. Status tidak akan dilihat.`,
-            "yellow"
-          );
-          return;
-        }
-
-        const myself = jidNormalizedUser(sock.user.id);
-        const emojiToReact = emojis[Math.floor(Math.random() * emojis.length)];
-
-        if (msg.key.remoteJid && msg.key.participant) {
-          await sock.readMessages([msg.key]);
-
-          if (autoLikeStatus) {
-            await sock.sendMessage(
-              msg.key.remoteJid,
-              { react: { key: msg.key, text: emojiToReact } },
-              { statusJidList: [msg.key.participant, myself] }
-            );
-          }
-
-          logCuy(
-            `Berhasil melihat ${
-              autoLikeStatus ? "dan menyukai " : ""
-            }status dari: ${senderName} (${displaySendernumber})`,
-            "green"
-          );
-
-          const targetNumber = loggedInNumber;
-          let messageContent = `Status dari *${senderName}* (${displaySendernumber}) telah dilihat ${
-            autoLikeStatus ? "dan disukai" : ""
-          }`;
-          let caption =
-            msg.message.imageMessage?.caption ||
-            msg.message.videoMessage?.caption ||
-            msg.message.extendedTextMessage?.text ||
-            "Tidak ada caption";
-
-          if (downloadMediaStatus) {
-            if (msg.type === "imageMessage" || msg.type === "videoMessage") {
-              let mediaType = msg.type === "imageMessage" ? "image" : "video";
-              messageContent = `Status ${
-                mediaType === "image" ? "gambar" : "video"
-              } dari *${senderName}* (${displaySendernumber}) telah dilihat ${
-                autoLikeStatus ? "dan disukai" : ""
-              }`;
-
-              try {
-                let buffer = await downloadMediaMessage(
-                  msg,
-                  "buffer",
-                  {},
-                  {
-                    logger: pino({ level: "fatal" }),
-                  }
-                );
-
-                await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                  [mediaType]: Buffer.from(buffer),
-                  caption: `${messageContent} dengan caption : "*${caption}*"`,
-                });
-
-                buffer = null;
-              } catch (error) {
-                logCuy(`Error uploading media: ${error}`, "red");
-                await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                  text: `${messageContent} namun Gagal mengunggah media dari status ${
-                    mediaType === "image" ? "gambar" : "video"
-                  } dari *${senderName}* (${displaySendernumber}).`,
-                });
-              }
-            } else if (msg.type === "audioMessage") {
-              messageContent = `Status audio dari *${senderName}* (${displaySendernumber}) telah dilihat ${
-                autoLikeStatus ? "dan disukai" : ""
-              }. Berikut audionya.`;
-
-              await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                text: messageContent,
-              });
-
-              try {
-                let buffer = await downloadMediaMessage(
-                  msg,
-                  "buffer",
-                  {},
-                  {
-                    logger: pino({ level: "fatal" }),
-                  }
-                );
-
-                await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                  audio: Buffer.from(buffer),
-                  caption: "",
-                });
-
-                buffer = null;
-              } catch (error) {
-                logCuy(`Error uploading media: ${error}`, "red");
-                await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                  text: `Gagal mengunggah audio dari status audio dari *${senderName}* (${displaySendernumber}).`,
-                });
-              }
-            } else {
-              messageContent = `Status teks dari *${senderName}* (${displaySendernumber}) telah dilihat ${
-                autoLikeStatus ? "dan disukai" : ""
-              } dengan caption: "*${caption}*"`;
-
-              await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                text: messageContent,
-              });
-            }
-          } else {
-            await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-              text: messageContent,
-            });
-          }
-        }
-      }
-    }
+    const { handleStatusUpdate } = require('./FITUR_WILY/CodeAutoReadStory.js');
+    await handleStatusUpdate(sock, msg, {
+      autoReadStatus,
+      autoLikeStatus, 
+      downloadMediaStatus,
+      sensorNomor,
+      loggedInNumber,
+      blackList,
+      whiteList,
+      emojis
+    }, logCuy);
   });
 }
 
