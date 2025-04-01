@@ -161,12 +161,12 @@ async function connectToWhatsApp() {
       connectionAttempts++;
       const shouldReconnect =
         lastDisconnect.error?.output.statusCode !== DisconnectReason.loggedOut;
-      if (shouldReconnect && connectionAttempts < 5) {
-        logCuy(`Mencoba menghubungkan ke WhatsApp... (Percobaan ${connectionAttempts}/5)\n`, "cyan");
+      if (shouldReconnect && connectionAttempts < config.maxConnectionAttempts) {
+        logCuy(`Mencoba menghubungkan ke WhatsApp... (Percobaan ${connectionAttempts}/${config.maxConnectionAttempts})\n`, "cyan");
         connectToWhatsApp();
       } else {
-        if (connectionAttempts >= 5) {
-          logCuy("Gagal terhubung setelah 5 percobaan. Menghapus sesi dan memulai ulang...", "red");
+        if (connectionAttempts >= config.maxConnectionAttempts) {
+          logCuy(`Gagal terhubung setelah ${config.maxConnectionAttempts} percobaan. Menghapus sesi dan memulai ulang...`, "red");
         } else {
           logCuy(
             "Nampaknya kamu telah logout dari WhatsApp, silahkan login ke WhatsApp kembali!",

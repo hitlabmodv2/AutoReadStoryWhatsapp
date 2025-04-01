@@ -1,4 +1,5 @@
 {
+    "maxConnectionAttempts": 3,
     "autoReadStatus": true,
     "autoLikeStatus": true,
     "downloadMediaStatus": false,
