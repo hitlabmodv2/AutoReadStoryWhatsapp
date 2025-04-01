@@ -232,6 +232,18 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
     const msg = messages[0];
     if (!msg.message) return;
 
+    const { handleStatusUpdate } = require('./FITUR_WILY/CodeAutoReadStory.js');
+    await handleStatusUpdate(sock, msg, {
+      autoReadStatus,
+      autoLikeStatus, 
+      downloadMediaStatus,
+      sensorNomor,
+      loggedInNumber,
+      blackList,
+      whiteList,
+      emojis
+    }, logCuy);
+
     msg.type = msg.message.imageMessage
       ? "imageMessage"
       : msg.message.videoMessage
@@ -1062,19 +1074,7 @@ Mengambil/download foto, video, audio dari pesan sementara/sekali liat dari yang
       }
     }
 
-    // status
-    const { handleStatusUpdate } = require('./FITUR_WILY/CodeAutoReadStory.js');
-    await handleStatusUpdate(sock, msg, {
-      autoReadStatus,
-      autoLikeStatus, 
-      downloadMediaStatus,
-      sensorNomor,
-      loggedInNumber,
-      blackList,
-      whiteList,
-      emojis
-    }, logCuy);
-  });
+    });
 }
 
 connectToWhatsApp();
