@@ -150,20 +150,27 @@ async function connectToWhatsApp() {
     askPairingCode();
   }
 
+  let connectionAttempts = 0;
   sock.ev.on("connection.update", async (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === "close") {
+      connectionAttempts++;
       const shouldReconnect =
         lastDisconnect.error?.output.statusCode !== DisconnectReason.loggedOut;
-      if (shouldReconnect) {
-        logCuy("Mencoba menghubungkan ke wangsaf...\n", "cyan");
+      if (shouldReconnect && connectionAttempts < 5) {
+        logCuy(`Mencoba menghubungkan ke wangsaf... (Percobaan ${connectionAttempts}/5)\n`, "cyan");
         connectToWhatsApp();
       } else {
-        logCuy(
-          "Nampaknya kamu telah logout dari wangsaf, silahkan login ke wangsaf kembali!",
-          "red"
-        );
-        fs.rmdirSync(sessionPath, { recursive: true, force: true });
+        if (connectionAttempts >= 5) {
+          logCuy("Gagal terhubung setelah 5 percobaan. Menghapus sesi dan memulai ulang...", "red");
+        } else {
+          logCuy(
+            "Nampaknya kamu telah logout dari wangsaf, silahkan login ke wangsaf kembali!",
+            "red"
+          );
+        }
+        fs.rmSync(sessionPath, { recursive: true, force: true });
+        connectionAttempts = 0;
         connectToWhatsApp();
       }
     } else if (connection === "open") {
