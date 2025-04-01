@@ -1,5 +1,6 @@
 {
     "autodeletesessions": 1,
+    "autoRecord": false,
     "autoTyping": false,
     "autoReadStatus": true,
     "autoLikeStatus": true,

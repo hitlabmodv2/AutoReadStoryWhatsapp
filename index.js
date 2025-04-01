@@ -199,6 +199,7 @@ info status fitur:
 - Anti Telpon: ${antiTelpon ? "*Aktif*" : "*Nonaktif*"}
 - Auto Kick tag Story: ${autoKickStory ? "*Aktif*" : "*Nonaktif*"}
 - Auto Typing: ${autoTypingStatus ? "*Aktif*" : "*Nonaktif*"}
+- Auto Record: ${config.autoRecord ? "*Aktif*" : "*Nonaktif*"}
 
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
@@ -419,6 +420,16 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                       { quoted: msg }
                     );
                     break;
+                  case "autorecord":
+                    config.autoRecord = true;
+                    updateConfig("autoRecord", true);
+                    logCuy("Kamu mengaktifkan fitur Auto Record", "blue");
+                    await sock.sendMessage(
+                      `${loggedInNumber}@s.whatsapp.net`,
+                      { text: "Auto Record aktif" },
+                      { quoted: msg }
+                    );
+                    break;
                   default:
                     await sock.sendMessage(
                       `${loggedInNumber}@s.whatsapp.net`,
@@ -515,6 +526,16 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                     await sock.sendMessage(
                       `${loggedInNumber}@s.whatsapp.net`,
                       { text: "Auto Typing nonaktif" },
+                      { quoted: msg }
+                    );
+                    break;
+                  case "autorecord":
+                    config.autoRecord = false;
+                    updateConfig("autoRecord", false);
+                    logCuy("Kamu mematikan fitur Auto Record", "blue");
+                    await sock.sendMessage(
+                      `${loggedInNumber}@s.whatsapp.net`,
+                      { text: "Auto Record nonaktif" },
                       { quoted: msg }
                     );
                     break;
