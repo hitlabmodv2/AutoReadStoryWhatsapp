@@ -51,10 +51,11 @@ let welcomeMessage = false;
 
 async function connectToWhatsApp() {
   const sessionPath = path.join(__dirname, "sessions");
-  const sessionExists =
-    fs.existsSync(sessionPath) && fs.readdirSync(sessionPath).length > 0;
-
+  if (!fs.existsSync(sessionPath)) {
+    fs.mkdirSync(sessionPath, { recursive: true });
+  }
   const { state, saveCreds } = await useMultiFileAuthState("sessions");
+  const sessionExists = fs.existsSync(path.join(sessionPath, "creds.json"));
 
   const sock = makeWASocket({
     logger: pino({ level: "silent" }),
