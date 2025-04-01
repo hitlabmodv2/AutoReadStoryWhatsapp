@@ -122,11 +122,13 @@ async function connectToWhatsApp() {
                     console.log("\n==================== KODE PEMASANGAN ====================".cyan.bold);
                     console.log(`Kode Pemasangan WhatsApp: ${code}`.green.bold);
                     console.log("=========================================================\n".cyan.bold);
-                    console.log("🔗 Cara memasukkan kode pemasangan:".yellow);
-                    console.log("1️⃣  Buka WhatsApp di ponsel Anda");
-                    console.log("2️⃣  Ketuk Menu (⋮) > Perangkat Tertaut");
-                    console.log("3️⃣  Ketuk 'Tautkan Perangkat'");
-                    console.log("4️⃣  Masukkan kode pemasangan yang ditampilkan di atas");
+                    console.log("🔗 Gunakan kode di atas untuk menghubungkan bot dengan WhatsApp Anda.".yellow);
+                    console.log("📋 Cara memasukkan pairing code di WhatsApp terbaru:".yellow);
+                    console.log("1️⃣  Buka aplikasi WhatsApp di ponsel Anda.");
+                    console.log("2️⃣  Ketuk ikon tiga titik di pojok kanan atas untuk membuka menu.");
+                    console.log("3️⃣  Pilih \"Perangkat Tertaut\" dari menu.");
+                    console.log("4️⃣  Ketuk \"Tautkan Perangkat\" dan masukkan pairing code yang ditampilkan di atas.");
+                    console.log("5️⃣  Ikuti instruksi di layar untuk menyelesaikan proses pairing.");
                     console.log("\n✨ Menunggu koneksi...".cyan);
                     rl.close();
                   }
