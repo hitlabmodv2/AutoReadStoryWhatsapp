@@ -120,7 +120,7 @@ async function connectToWhatsApp() {
 
                     const code = await sock.requestPairingCode(waNumber);
                     console.log("\n==================== KODE PEMASANGAN ====================".cyan.bold);
-                    console.log(`Kode Pemasangan WhatsApp: ${code}`.green.bold);
+                    console.log(`Kode Pemasangan WhatsApp: ${code.slice(0,4)}-${code.slice(4)}`.green.bold);
                     console.log("=========================================================\n".cyan.bold);
                     console.log("🔗 Gunakan kode di atas untuk menghubungkan bot dengan WhatsApp Anda.".yellow);
                     console.log("📋 Cara memasukkan pairing code di WhatsApp terbaru:".yellow);
