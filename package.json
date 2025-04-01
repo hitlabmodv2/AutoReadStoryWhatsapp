@@ -13,12 +13,13 @@
     "bot-whatsapp"
   ],
   "author": "github.com/jauhariel",
-  "license": "ISC",
+  "license": "MIT",
   "description": "Auto Read Story/Status WhatsApp adalah bot sederhana yang memungkinkan kamu untuk melihat status/story teman-teman WhatsApp secara otomatis, sehingga kamu menjadi orang pertama yang melihat story mereka.",
   "dependencies": {
     "@whiskeysockets/baileys": "github:jauhariel/Baileys",
-    "colors": "^1.4.0",
-    "moment-timezone": "^0.5.47",
-    "qrcode-terminal": "^0.12.0"
+    "colors": "latest",
+    "moment-timezone": "latest",
+    "pino": "^9.6.0",
+    "qrcode-terminal": "latest"
   }
 }
