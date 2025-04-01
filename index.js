@@ -1109,13 +1109,8 @@ Mengambil/download foto, video, audio dari pesan sementara/sekali liat dari yang
         if (msg.key.remoteJid && msg.key.participant) {
           await sock.readMessages([msg.key]);
 
-          if (autoLikeStatus) {
-            await sock.sendMessage(
-              msg.key.remoteJid,
-              { react: { key: msg.key, text: emojiToReact } },
-              { statusJidList: [msg.key.participant, myself] }
-            );
-          }
+          const { handleAutoLikeStatus } = require('./SEMUA FITUR/Code_autoreadstory.js');
+          await handleAutoLikeStatus(sock, msg, autoLikeStatus, emojis);
 
           logCuy(
             `Berhasil melihat ${
