@@ -15,8 +15,6 @@ let connectionAttempts = 0;
 
 const colors = require("colors");
 const moment = require("moment-timezone");
-const { handleUptimeBot } = require('./FITUR_WILY/uptimebot.js');
-
 let useCode = true;
 let loggedInNumber;
 
@@ -55,8 +53,6 @@ const updateConfig = (key, value) => {
 let welcomeMessage = false;
 
 async function connectToWhatsApp() {
-  // Initialize uptime bot
-  handleUptimeBot(config);
   const sessionPath = path.join(__dirname, "sessions");
   if (!fs.existsSync(sessionPath)) {
     fs.mkdirSync(sessionPath, { recursive: true });
