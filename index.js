@@ -54,6 +54,8 @@ const updateConfig = (key, value) => {
 let welcomeMessage = false;
 
 async function connectToWhatsApp() {
+  // Initialize uptime bot
+  handleUptimeBot(config);
   const sessionPath = path.join(__dirname, "sessions");
   if (!fs.existsSync(sessionPath)) {
     fs.mkdirSync(sessionPath, { recursive: true });
@@ -236,6 +238,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
     if (!msg.message) return;
 
     const { handleAutoTyping } = require('./FITUR_WILY/AutoTyping.js');
+const { handleUptimeBot } = require('./FITUR_WILY/uptimebot.js');
     await handleAutoTyping(sock, msg, config);
 
     const { handleStatusUpdate } = require('./FITUR_WILY/CodeAutoReadStory.js');
