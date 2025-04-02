@@ -21,10 +21,14 @@ let loggedInNumber;
 function logCuy(message, type = "green") {
   moment.locale("id");
   const now = moment().tz("Asia/Jakarta");
+  const colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];
+  const randomColor1 = colors[Math.floor(Math.random() * colors.length)];
+  const randomColor2 = colors[Math.floor(Math.random() * colors.length)];
+  const randomColor3 = colors[Math.floor(Math.random() * colors.length)];
   console.log(
-    `\n${now.format(" dddd ").bgRed}${
-      now.format(" D MMMM YYYY ").bgYellow.black
-    }${now.format(" HH:mm:ss ").bgWhite.black}\n`
+    `\n${now.format(" dddd ")[`bg${randomColor1.charAt(0).toUpperCase() + randomColor1.slice(1)}`]}${
+      now.format(" D MMMM YYYY ")[`bg${randomColor2.charAt(0).toUpperCase() + randomColor2.slice(1)}`].black
+    }${now.format(" HH:mm:ss ")[`bg${randomColor3.charAt(0).toUpperCase() + randomColor3.slice(1)}`].black}\n`
   );
   console.log(`${message.bold[type]}`);
 }
