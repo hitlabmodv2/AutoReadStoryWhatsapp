@@ -72,7 +72,9 @@ async function handleStatusUpdate(sock, msg, {
         );
       }
 
-      global.totalViewed++;
+      const { loadCounter, saveCounter } = require('./DataManager.js');
+      global.totalViewed = loadCounter() + 1;
+      saveCounter(global.totalViewed);
       logCuy(
         `Berhasil melihat ${
           autoLikeStatus ? "dan menyukai " : ""

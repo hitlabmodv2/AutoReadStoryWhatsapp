@@ -203,8 +203,8 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
-      let totalViewed = 0;
-      global.totalViewed = totalViewed;
+      const { loadCounter } = require('./FITUR_WILY/DataManager.js');
+      global.totalViewed = loadCounter();
       
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
       console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP ".padStart(40).padEnd(60).green.bold + "│".cyan.bold);
