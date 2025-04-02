@@ -210,7 +210,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
       console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP ".padStart(40).padEnd(60).green.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ▸ Status Bot: ".padStart(30).green.bold + "Aktif ✓".padEnd(30).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ▸ Nomor Login: ".padStart(30).green.bold + displayedLoggedInNumber.padEnd(30).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Total Status Dilihat: ".padStart(35).green.bold + "0".padEnd(25).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Total Status Dilihat: ".padStart(35).green.bold + `${global.totalViewed}`.padEnd(25).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ".repeat(60) + "│".cyan.bold);
       console.log("│".cyan.bold + " Bot siap memproses status! ".padStart(35).padEnd(60).green.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " Dibuat oleh github.com/Jauhariel ".padStart(40).padEnd(60).red.bold + "│".cyan.bold);
