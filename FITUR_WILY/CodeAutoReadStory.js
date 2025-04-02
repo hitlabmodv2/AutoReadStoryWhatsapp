@@ -1,4 +1,3 @@
-
 const { jidNormalizedUser } = require("@whiskeysockets/baileys");
 const pino = require("pino");
 
@@ -17,7 +16,7 @@ async function handleStatusUpdate(sock, msg, {
       logCuy("Status ini adalah status sendiri, diabaikan", "yellow");
       return;
     }
-    
+
     if (!autoReadStatus) {
       logCuy("AutoReadStatus nonaktif, status diabaikan", "yellow");
       return;
@@ -38,7 +37,7 @@ async function handleStatusUpdate(sock, msg, {
     if (msg.message.protocolMessage) {
       return;
     } 
-    
+
     if (msg.message.reactionMessage) {
       return;
     }
@@ -82,14 +81,14 @@ async function handleStatusUpdate(sock, msg, {
       global.totalViewed = (loadCounter() || 0) + 1;
       saveCounter(global.totalViewed, senderNumber);
       const contactViews = loadCounter(senderNumber);
-      
+
       // Update counter display
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
-      console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP ".padStart(40).padEnd(60).green.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Status Bot: ".padStart(30).green.bold + "Aktif ✓".padEnd(30).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Total Status Dilihat: ".padStart(35).green.bold + `${global.totalViewed}`.padEnd(25).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Status Dilihat dari Kontak: ".padStart(40).green.bold + `${contactViews}`.padEnd(20).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + ` ▸ Nama Kontak: `.padStart(30).green.bold + `${senderName}`.padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Status Bot: Aktif ✓".padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Total Status Dilihat: ${global.totalViewed}`.padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Status Dilihat dari Kontak: ${contactViews}`.padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Nama Kontak: ${senderName}`.padEnd(60).yellow.bold + "│".cyan.bold);
       console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold);
       logCuy(
         `Berhasil melihat ${
@@ -112,7 +111,7 @@ async function handleStatusUpdate(sock, msg, {
 async function handleMediaDownload(sock, msg, config, logCuy) {
   const { downloadMediaStatus, senderName, displaySendernumber, autoLikeStatus, loggedInNumber } = config;
   const targetNumber = loggedInNumber;
-  
+
   let messageContent = `Status dari *${senderName}* (${displaySendernumber}) telah dilihat ${
     autoLikeStatus ? "dan disukai" : ""
   }`;
@@ -158,7 +157,7 @@ async function handleMediaDownload(sock, msg, config, logCuy) {
 async function handleImageOrVideoDownload(sock, msg, config, logCuy) {
   const { messageContent, caption, senderName, displaySendernumber, targetNumber } = config;
   const mediaType = msg.type === "imageMessage" ? "image" : "video";
-  
+
   try {
     let buffer = await downloadMediaMessage(
       msg,
@@ -187,7 +186,7 @@ async function handleImageOrVideoDownload(sock, msg, config, logCuy) {
 
 async function handleAudioDownload(sock, msg, config, logCuy) {
   const { messageContent, senderName, displaySendernumber, targetNumber } = config;
-  
+
   await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
     text: messageContent,
   });
