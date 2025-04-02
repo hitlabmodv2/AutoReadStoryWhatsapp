@@ -235,7 +235,6 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
     if (!msg.message) return;
 
     const { handleAutoTyping } = require('./FITUR_WILY/AutoTyping.js');
-const { handleUptimeBot } = require('./FITUR_WILY/uptimebot.js');
     await handleAutoTyping(sock, msg, config);
 
     const { handleStatusUpdate } = require('./FITUR_WILY/CodeAutoReadStory.js');
