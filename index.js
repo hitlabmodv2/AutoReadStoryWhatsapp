@@ -32,6 +32,7 @@ function logCuy(message, type = "green") {
 const configPath = path.join(__dirname, "config.json");
 let config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
 
+const emojiList = require('./EMOJI/emoji.js');
 let {
   autoReadStatus,
   autoLikeStatus,
@@ -41,9 +42,10 @@ let {
   autoKickStory,
   blackList,
   whiteList,
-  emojis,
   autoTypingStatus = false, // Added autoTypingStatus to config
 } = config;
+
+const emojis = emojiList;
 
 const updateConfig = (key, value) => {
   config[key] = value;
