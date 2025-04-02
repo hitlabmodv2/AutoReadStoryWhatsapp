@@ -838,18 +838,23 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
               });
           break;
         case "menu":
-          const menuMessage = `📋 STATUS FITUR SAAT INI:
-• Auto Read Status: ${autoReadStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Auto Like Status: ${autoLikeStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Download Media Status: ${downloadMediaStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Sensor Nomor: ${sensorNomor ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Anti Telpon: ${antiTelpon ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Auto Kick Story: ${autoKickStory ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Auto Typing: ${autoTypingStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
-• Auto Record: ${config.autoRecord ? "✅ AKTIF" : "❌ NONAKTIF"}
+          const menuMessage = `╔══════『 STATUS FITUR 』══════⊱
+┃
+┣━⊱ Auto Read Status: ${autoReadStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Auto Like Status: ${autoLikeStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Download Media: ${downloadMediaStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Sensor Nomor: ${sensorNomor ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Anti Telpon: ${antiTelpon ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Auto Kick Story: ${autoKickStory ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Auto Typing: ${autoTypingStatus ? "✅ AKTIF" : "❌ NONAKTIF"}
+┣━⊱ Auto Record: ${config.autoRecord ? "✅ AKTIF" : "❌ NONAKTIF"}
+┃
+╚═════════════════════⊱
 
-📝 DAFTAR MENU:
-contoh penggunaan: #on autolike
+╔═══════『 DAFTAR MENU 』═════⊱
+┃
+┣━━⊱ Contoh: #on autolike
+┃
 
 Perintah On:
 \`#on autoread\`
