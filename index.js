@@ -203,13 +203,17 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
+      let totalViewed = 0;
+      global.totalViewed = totalViewed;
+      
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
-      console.log("│".cyan.bold + " 🤖 AUTO READ STORY WHATSAPP BOT ".padStart(40).padEnd(60).green.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Status: ".padStart(30).green.bold + "Online ✓".padEnd(30).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Login Number: ".padStart(30).green.bold + displayedLoggedInNumber.padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP ".padStart(40).padEnd(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Status Bot: ".padStart(30).green.bold + "Aktif ✓".padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Nomor Login: ".padStart(30).green.bold + displayedLoggedInNumber.padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Total Status Dilihat: ".padStart(35).green.bold + "0".padEnd(25).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ".repeat(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + " Bot is now active and ready to process stories! ".padStart(45).padEnd(60).green.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " Created by github.com/Jauhariel ".padStart(40).padEnd(60).red.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " Bot siap memproses status! ".padStart(35).padEnd(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " Dibuat oleh github.com/Jauhariel ".padStart(40).padEnd(60).red.bold + "│".cyan.bold);
       console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold + "\n");
 
       if (!welcomeMessage) {

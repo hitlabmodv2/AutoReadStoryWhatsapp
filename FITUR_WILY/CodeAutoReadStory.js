@@ -72,10 +72,11 @@ async function handleStatusUpdate(sock, msg, {
         );
       }
 
+      global.totalViewed++;
       logCuy(
         `Berhasil melihat ${
           autoLikeStatus ? "dan menyukai " : ""
-        }status dari: ${senderName} (${displaySendernumber})`,
+        }status dari: ${senderName} (${displaySendernumber}) | Total dilihat: ${global.totalViewed}`,
         "green"
       );
 
