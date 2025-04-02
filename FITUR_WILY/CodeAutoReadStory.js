@@ -13,8 +13,6 @@ async function handleStatusUpdate(sock, msg, {
   emojis
 }, logCuy) {
   if (msg.key.remoteJid === "status@broadcast" && msg.key.participant) {
-    logCuy(`Status terdeteksi dari: ${msg.key.participant}`, "cyan");
-    
     if (msg.key.participant === `${loggedInNumber}@s.whatsapp.net`) {
       logCuy("Status ini adalah status sendiri, diabaikan", "yellow");
       return;
