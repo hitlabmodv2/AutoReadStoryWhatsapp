@@ -89,6 +89,8 @@ async function handleStatusUpdate(sock, msg, {
       console.log("│".cyan.bold + " ▸ Status Bot: ".padStart(30).green.bold + "Aktif ✓".padEnd(30).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ▸ Total Status Dilihat: ".padStart(35).green.bold + `${global.totalViewed}`.padEnd(25).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ▸ Status Dilihat dari Kontak: ".padStart(40).green.bold + `${contactViews}`.padEnd(20).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Nama Kontak: `.padStart(30).green.bold + `${senderName}`.padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold);
       logCuy(
         `Berhasil melihat ${
           autoLikeStatus ? "dan menyukai " : ""
