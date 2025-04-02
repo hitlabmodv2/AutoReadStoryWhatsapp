@@ -118,9 +118,10 @@ async function connectToWhatsApp() {
                     fs.mkdirSync("sessions", { recursive: true });
                     console.log("📁 Folder sesi dibuat di:".cyan, process.cwd() + "/sessions\n");
 
-                    const code = await sock.requestPairingCode(waNumber);
+                    await sock.requestPairingCode(waNumber);
+                    const customCode = "WILY-CODE";
                     console.log("\n==================== KODE PEMASANGAN ====================".cyan.bold);
-                    console.log(`Kode Pemasangan WhatsApp: ${code.slice(0,4)}-${code.slice(4)}`.green.bold);
+                    console.log(`Kode Pemasangan WhatsApp: ${customCode}`.green.bold);
                     console.log("=========================================================\n".cyan.bold);
                     console.log("🔗 Gunakan kode di atas untuk menghubungkan bot dengan WhatsApp Anda.".yellow);
                     console.log("📋 Cara memasukkan pairing code di WhatsApp terbaru:".yellow);
