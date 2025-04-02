@@ -1,7 +1,7 @@
 {
     "autodeletesessions": 5,
     "autoRecord": false,
-    "autoTyping": false,
+    "autoTyping": true,
     "autoReadStatus": true,
     "autoLikeStatus": true,
     "downloadMediaStatus": false,
