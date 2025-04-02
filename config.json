@@ -1,5 +1,5 @@
 {
-    "autodeletesessions": 5,
+    "autodeletesessions": 30,
     "autoRecord": false,
     "autoTyping": true,
     "autoReadStatus": true,
