@@ -38,10 +38,6 @@ async function handleStatusUpdate(sock, msg, {
     }
 
     if (msg.message.protocolMessage) {
-      logCuy(
-        `Status dari ${senderName} (${displaySendernumber}) telah dihapus.`,
-        "red"
-      );
       return;
     } 
     
