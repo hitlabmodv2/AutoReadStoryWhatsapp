@@ -203,15 +203,14 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
-      console.log(
-        `kamu berhasil login dengan nomor:`.green.bold,
-        displayedLoggedInNumber.yellow.bold
-      );
-      console.log(
-        "Bot sudah aktif!\n\nSelamat menikmati fitur auto read story whatsapp by"
-          .green.bold,
-        "github.com/Jauhariel\n".red.bold
-      );
+      console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
+      console.log("│".cyan.bold + " 🤖 AUTO READ STORY WHATSAPP BOT ".center(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Status: ".padStart(30).green.bold + "Online ✓".padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Login Number: ".padStart(30).green.bold + displayedLoggedInNumber.padEnd(30).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ".repeat(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + " Bot is now active and ready to process stories! ".center(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " Created by github.com/Jauhariel ".center(60).red.bold + "│".cyan.bold);
+      console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold + "\n");
 
       if (!welcomeMessage) {
         setTimeout(async () => {
