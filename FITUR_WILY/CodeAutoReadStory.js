@@ -12,11 +12,18 @@ async function handleStatusUpdate(sock, msg, {
   whiteList,
   emojis
 }, logCuy) {
-  if (
-    msg.key.remoteJid === "status@broadcast" &&
-    msg.key.participant !== `${loggedInNumber}@s.whatsapp.net` &&
-    autoReadStatus
-  ) {
+  if (msg.key.remoteJid === "status@broadcast") {
+    logCuy(`Status terdeteksi dari: ${msg.key.participant}`, "cyan");
+    
+    if (msg.key.participant === `${loggedInNumber}@s.whatsapp.net`) {
+      logCuy("Status ini adalah status sendiri, diabaikan", "yellow");
+      return;
+    }
+    
+    if (!autoReadStatus) {
+      logCuy("AutoReadStatus nonaktif, status diabaikan", "yellow");
+      return;
+    }
     let senderNumber = msg.key.participant
       ? msg.key.participant.split("@")[0]
       : "Tidak diketahui";
@@ -65,11 +72,16 @@ async function handleStatusUpdate(sock, msg, {
       await sock.readMessages([msg.key]);
 
       if (autoLikeStatus) {
-        await sock.sendMessage(
-          msg.key.remoteJid,
-          { react: { key: msg.key, text: emojiToReact } },
-          { statusJidList: [msg.key.participant, myself] }
-        );
+        try {
+          await sock.sendMessage(
+            msg.key.remoteJid,
+            { react: { key: msg.key, text: emojiToReact } },
+            { statusJidList: [msg.key.participant, myself] }
+          );
+          logCuy(`Berhasil memberikan reaksi ${emojiToReact} ke status`, "green");
+        } catch (error) {
+          logCuy(`Gagal memberikan reaksi: ${error.message}`, "red");
+        }
       }
 
       const { loadCounter, saveCounter } = require('./DataManager.js');
