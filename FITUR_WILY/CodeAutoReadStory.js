@@ -86,13 +86,15 @@ async function handleStatusUpdate(sock, msg, {
 
       const { loadCounter, saveCounter } = require('./DataManager.js');
       global.totalViewed = (loadCounter() || 0) + 1;
-      saveCounter(global.totalViewed);
+      saveCounter(global.totalViewed, senderNumber);
+      const contactViews = loadCounter(senderNumber);
       
       // Update counter display
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
       console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP ".padStart(40).padEnd(60).green.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ▸ Status Bot: ".padStart(30).green.bold + "Aktif ✓".padEnd(30).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ▸ Total Status Dilihat: ".padStart(35).green.bold + `${global.totalViewed}`.padEnd(25).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Status Dilihat dari Kontak: ".padStart(40).green.bold + `${contactViews}`.padEnd(20).yellow.bold + "│".cyan.bold);
       logCuy(
         `Berhasil melihat ${
           autoLikeStatus ? "dan menyukai " : ""
