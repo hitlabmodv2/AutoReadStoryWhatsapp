@@ -62,6 +62,30 @@ function incrementRestartCounter() {
     return data.restarts;
   } catch (error) {
     console.error('Error updating restart counter:', error);
+
+function saveCredentials(username, password) {
+  initDataDirectory();
+  const credentialsFile = path.join(DATA_DIR, 'credentials.json');
+  try {
+    fs.writeFileSync(credentialsFile, JSON.stringify({ username, password }), 'utf8');
+  } catch (error) {
+    console.error('Error saving credentials:', error);
+  }
+}
+
+function loadCredentials() {
+  const credentialsFile = path.join(DATA_DIR, 'credentials.json');
+  try {
+    if (fs.existsSync(credentialsFile)) {
+      return JSON.parse(fs.readFileSync(credentialsFile, 'utf8'));
+    }
+  } catch (error) {
+    console.error('Error loading credentials:', error);
+  }
+  return null;
+}
+
+
     return 0;
   }
 }

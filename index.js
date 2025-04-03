@@ -98,6 +98,12 @@ let credentialCheckInterval;
 
 async function verifyCredentials(inputUsername, inputPassword) {
   try {
+    // Check saved credentials first
+    const savedCreds = loadCredentials();
+    if (savedCreds && savedCreds.username === inputUsername && savedCreds.password === inputPassword) {
+      return true;
+    }
+    
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
     const data = await response.text();
 
@@ -116,6 +122,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
 
     if (isValid) {
       lastValidCredentials = { username: validUsername, password: validPassword };
+      saveCredentials(validUsername, validPassword);
 
       if (!credentialCheckInterval) {
         credentialCheckInterval = setInterval(async () => {
