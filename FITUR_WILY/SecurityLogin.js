@@ -9,14 +9,38 @@ const readline = require("readline");
 
 const maskInput = (query) => {
   return new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
-    rl.question(query, (answer) => {
-      rl.close();
-      resolve(answer);
+    process.stdout.write(query);
+    const stdin = process.stdin;
+    stdin.setRawMode(true);
+    stdin.resume();
+    stdin.setEncoding('utf-8');
+    
+    let password = '';
+    
+    stdin.on('data', (char) => {
+      const charStr = char.toString();
+      switch (charStr) {
+        case '\r':
+        case '\n':
+          process.stdout.write('\n');
+          stdin.setRawMode(false);
+          stdin.pause();
+          resolve(password);
+          break;
+        case '\u0003': // Ctrl+C
+          process.exit();
+          break;
+        case '\u0008': // Backspace
+        case '\u007F': // Delete
+          if (password.length > 0) {
+            password = password.slice(0, -1);
+            process.stdout.write('\b \b');
+          }
+          break;
+        default:
+          password += charStr;
+          process.stdout.write('*');
+      }
     });
   });
 };
