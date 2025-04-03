@@ -87,6 +87,11 @@ async function handleStatusUpdate(sock, msg, {
       const textColor = randomColor();
       
       // Update counter display in columns with random colors
+      const statusType = msg.message.imageMessage ? "Gambar" : 
+                        msg.message.videoMessage ? "Video" : 
+                        msg.message.audioMessage ? "Audio" :
+                        msg.message.extendedTextMessage ? "Teks" : "Tidak diketahui";
+
       console.log("\n" + "╭─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╮"[bgColor].bold);
       console.log("│"[bgColor].bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + "─".repeat(60)[bgColor] + "│"[bgColor].bold);
@@ -95,6 +100,7 @@ async function handleStatusUpdate(sock, msg, {
       console.log("│"[bgColor].bold + ` Dilihat Kontak    : ${contactViews}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Nama Kontak       : ${senderName}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Nomor Kontak      : ${displaySendernumber}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Tipe Status       : ${statusType}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Reaksi Diberikan  : ${emojiToReact}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Status            : ${autoLikeStatus ? "Dilihat & Disukai" : "Dilihat"}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("╰─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╯"[bgColor].bold);
