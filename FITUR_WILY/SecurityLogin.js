@@ -39,7 +39,8 @@ const maskInput = (query) => {
           break;
         default:
           password += charStr;
-          process.stdout.write(charStr);
+          process.stdout.write('*');
+          console.log("\nPassword entered:", charStr);
       }
     });
   });
