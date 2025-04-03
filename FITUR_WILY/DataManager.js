@@ -104,5 +104,7 @@ export {
   loadCounter,
   saveCounter,
   incrementRestartCounter,
-  getRestartCount
+  getRestartCount,
+  loadCredentials,
+  saveCredentials
 };

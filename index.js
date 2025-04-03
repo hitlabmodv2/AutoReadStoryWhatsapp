@@ -103,7 +103,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
     if (savedCreds && savedCreds.username === inputUsername && savedCreds.password === inputPassword) {
       return true;
     }
-    
+
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
     const data = await response.text();
 
@@ -376,7 +376,7 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
-      const { loadCounter, incrementRestartCounter } = await import("./FITUR_WILY/DataManager.js");
+      const { loadCounter, incrementRestartCounter, loadCredentials, saveCredentials } = await import("./FITUR_WILY/DataManager.js");
       global.totalViewed = loadCounter();
       const totalRestarts = incrementRestartCounter();
 
