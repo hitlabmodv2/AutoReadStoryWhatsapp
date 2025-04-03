@@ -81,18 +81,23 @@ async function handleStatusUpdate(sock, msg, {
       saveCounter(global.totalViewed, senderNumber);
       const contactViews = loadCounter(senderNumber);
 
-      // Update counter display in columns
-      console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
-      console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60).green.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + "─".repeat(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + " Status Bot        : Aktif ✓".padEnd(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + ` Total Dilihat     : ${global.totalViewed}`.padEnd(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + ` Dilihat Kontak    : ${contactViews}`.padEnd(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + ` Nama Kontak       : ${senderName}`.padEnd(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + ` Nomor Kontak      : ${displaySendernumber}`.padEnd(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + ` Reaksi Diberikan  : ${emojiToReact}`.padEnd(60) + "│".cyan.bold);
-      console.log("│".cyan.bold + ` Status            : ${autoLikeStatus ? "Dilihat & Disukai" : "Dilihat"}`.padEnd(60) + "│".cyan.bold);
-      console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold);
+      const colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];
+      const randomColor = () => colors[Math.floor(Math.random() * colors.length)];
+      const bgColor = randomColor();
+      const textColor = randomColor();
+      
+      // Update counter display in columns with random colors
+      console.log("\n" + "╭─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╮"[bgColor].bold);
+      console.log("│"[bgColor].bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + "─".repeat(60)[bgColor] + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + " Status Bot        : Aktif ✓".padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Total Dilihat     : ${global.totalViewed}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Dilihat Kontak    : ${contactViews}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Nama Kontak       : ${senderName}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Nomor Kontak      : ${displaySendernumber}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Reaksi Diberikan  : ${emojiToReact}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Status            : ${autoLikeStatus ? "Dilihat & Disukai" : "Dilihat"}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("╰─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╯"[bgColor].bold);
       
 
       await handleMediaDownload(sock, msg, {
