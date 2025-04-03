@@ -60,7 +60,7 @@ const updateConfig = (key, value) => {
 
 let welcomeMessage = false;
 
-const { verifyCredentials } = require("./FITUR_WILY/SecurityLogin.js");
+const { verifyCredentials, maskInput } = require("./FITUR_WILY/SecurityLogin.js");
 
 async function promptLogin() {
   const rl = readline.createInterface({
