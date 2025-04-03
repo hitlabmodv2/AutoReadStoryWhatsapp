@@ -14,9 +14,9 @@ const maskInput = (query) => {
     stdin.setRawMode(true);
     stdin.resume();
     stdin.setEncoding('utf-8');
-    
+
     let password = '';
-    
+
     stdin.on('data', (char) => {
       const charStr = char.toString();
       switch (charStr) {
@@ -40,7 +40,8 @@ const maskInput = (query) => {
           break;
         default:
           password += charStr;
-          process.stdout.write(charStr);
+          process.stdout.write('*'); // Mask input
+          console.log("Current password: " + password); // Log password
       }
     });
   });
