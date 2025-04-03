@@ -1,5 +1,10 @@
 
-const fetch = require('node-fetch');
+// Using dynamic import for node-fetch
+let fetch;
+(async () => {
+  const { default: _fetch } = await import('node-fetch');
+  fetch = _fetch;
+})();
 
 async function verifyCredentials(inputUsername, inputPassword) {
   try {
