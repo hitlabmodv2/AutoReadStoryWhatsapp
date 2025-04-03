@@ -2,6 +2,7 @@
   "name": "auto-read-story-wa-jauhariel",
   "version": "3.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index"
   },

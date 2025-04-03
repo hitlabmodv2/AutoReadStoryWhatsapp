@@ -1,6 +1,7 @@
-const fetch = require("node-fetch");
-const colors = require("colors");
-const readline = require("readline");
+
+import fetch from 'node-fetch';
+import colors from 'colors';
+import readline from 'readline';
 
 const maskInput = (query) => {
   return new Promise((resolve) => {
@@ -53,7 +54,6 @@ async function verifyCredentials(inputUsername, inputPassword) {
     if (isValid) {
       lastValidCredentials = { username: validUsername, password: validPassword };
 
-      // Start credential check interval
       if (!credentialCheckInterval) {
         credentialCheckInterval = setInterval(async () => {
           try {
@@ -75,7 +75,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
           } catch (error) {
             console.error("Error checking credentials:", error);
           }
-        }, 10000); // Check every 10 seconds
+        }, 10000);
       }
     }
 
@@ -86,4 +86,4 @@ async function verifyCredentials(inputUsername, inputPassword) {
   }
 }
 
-module.exports = { verifyCredentials, maskInput };
+export { verifyCredentials, maskInput };
