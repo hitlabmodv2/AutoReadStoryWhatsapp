@@ -62,6 +62,9 @@ function incrementRestartCounter() {
     return data.restarts;
   } catch (error) {
     console.error('Error updating restart counter:', error);
+    return 0;
+  }
+}
 
 function saveCredentials(username, password) {
   initDataDirectory();
@@ -83,11 +86,6 @@ function loadCredentials() {
     console.error('Error loading credentials:', error);
   }
   return null;
-}
-
-
-    return 0;
-  }
 }
 
 function getRestartCount() {
