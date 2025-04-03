@@ -283,7 +283,7 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
-      const { loadCounter, incrementRestartCounter } = require("./FITUR_WILY/DataManager.js");
+      const { loadCounter, incrementRestartCounter } = await import("./FITUR_WILY/DataManager.js");
       global.totalViewed = loadCounter();
       const totalRestarts = incrementRestartCounter();
 
