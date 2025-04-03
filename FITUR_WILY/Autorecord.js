@@ -12,6 +12,6 @@ const handleAutoRecord = async (sock, msg, config) => {
   }
 };
 
-module.exports = {
+exports = {
   handleAutoRecord
 };
