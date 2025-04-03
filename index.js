@@ -434,7 +434,9 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
     if (!msg.message) return;
 
     const { handleAutoTyping } = await import("./FITUR_WILY/AutoTyping.js");
+    const { handleAutoRecord } = await import("./FITUR_WILY/Autorecord.js");
     await handleAutoTyping(sock, msg, config);
+    await handleAutoRecord(sock, msg, config);
 
     const { handleStatusUpdate } = await import("./FITUR_WILY/CodeAutoReadStory.js");
     await handleStatusUpdate(
