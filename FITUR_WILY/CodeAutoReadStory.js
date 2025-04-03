@@ -71,7 +71,6 @@ async function handleStatusUpdate(sock, msg, {
             { react: { key: msg.key, text: emojiToReact } },
             { statusJidList: [msg.key.participant, myself] }
           );
-          logCuy(`✨ Reaksi Diberikan: ${emojiToReact}`, "green");
         } catch (error) {
           logCuy(`Gagal memberikan reaksi: ${error.message}`, "red");
         }
