@@ -4,10 +4,14 @@ const path = require('path');
 
 const DATA_DIR = path.join(__dirname, '..', 'DATA');
 const COUNTER_FILE = path.join(DATA_DIR, 'viewed_counter.json');
+const RESTART_FILE = path.join(DATA_DIR, 'restart_counter.json');
 
 function initDataDirectory() {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  if (!fs.existsSync(RESTART_FILE)) {
+    fs.writeFileSync(RESTART_FILE, JSON.stringify({ restarts: 0 }), 'utf8');
   }
 }
 
@@ -45,7 +49,31 @@ function saveCounter(count, contact = null) {
   }
 }
 
+function incrementRestartCounter() {
+  try {
+    const data = JSON.parse(fs.readFileSync(RESTART_FILE, 'utf8'));
+    data.restarts += 1;
+    fs.writeFileSync(RESTART_FILE, JSON.stringify(data, null, 2), 'utf8');
+    return data.restarts;
+  } catch (error) {
+    console.error('Error updating restart counter:', error);
+    return 0;
+  }
+}
+
+function getRestartCount() {
+  try {
+    const data = JSON.parse(fs.readFileSync(RESTART_FILE, 'utf8'));
+    return data.restarts;
+  } catch (error) {
+    console.error('Error reading restart counter:', error);
+    return 0;
+  }
+}
+
 module.exports = {
   loadCounter,
-  saveCounter
+  saveCounter,
+  incrementRestartCounter,
+  getRestartCount
 };

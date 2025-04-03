@@ -252,8 +252,9 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
-      const { loadCounter } = require("./FITUR_WILY/DataManager.js");
+      const { loadCounter, incrementRestartCounter } = require("./FITUR_WILY/DataManager.js");
       global.totalViewed = loadCounter();
+      const totalRestarts = incrementRestartCounter();
 
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
       console.log(
@@ -273,8 +274,12 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
       );
       console.log(
         "│".cyan.bold +
-          ` ▸ Total Status Dilihat: ${global.totalViewed}`.padEnd(60).yellow
-            .bold +
+          ` ▸ Total Status Dilihat: ${global.totalViewed}`.padEnd(60).yellow.bold +
+          "│".cyan.bold,
+      );
+      console.log(
+        "│".cyan.bold +
+          ` ▸ Total Bot Restart: ${totalRestarts}`.padEnd(60).yellow.bold +
           "│".cyan.bold,
       );
       console.log("│".cyan.bold + " ".repeat(60) + "│".cyan.bold);
@@ -796,7 +801,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                     await sock.sendMessage(
                       `${loggedInNumber}@s.whatsapp.net`,
                       {
-                        text: `hanya boleh mengisi 1 emoji.\ncontoh ketik :\n\`#remove emojis f���\``,
+                        text: `hanya boleh mengisi 1 emoji.\ncontoh ketik :\n\`#remove emojis f\``,
                       },
                       { quoted: msg },
                     );
@@ -839,7 +844,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                     "dari",
                     data,
                   );
-                  if (!isValid) return;
+                  ifif (!isValid) return;
                   let displayNumber = data;
                   if (sensorNomor) {
                     displayNumber =
