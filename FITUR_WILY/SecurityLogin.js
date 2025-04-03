@@ -11,22 +11,13 @@ const maskInput = (query) => {
   return new Promise((resolve) => {
     const rl = readline.createInterface({
       input: process.stdin,
-      output: process.stdout,
-      terminal: true
+      output: process.stdout
     });
 
     rl.question(query, (answer) => {
       rl.close();
       resolve(answer);
     });
-
-    rl._writeToOutput = function _writeToOutput(stringToWrite) {
-      if (stringToWrite === query) {
-        rl.output.write(stringToWrite);
-      } else {
-        rl.output.write('*');
-      }
-    };
   });
 };
 
