@@ -71,7 +71,7 @@ async function handleStatusUpdate(sock, msg, {
             { react: { key: msg.key, text: emojiToReact } },
             { statusJidList: [msg.key.participant, myself] }
           );
-          logCuy(`Berhasil memberikan reaksi ${emojiToReact} ke status`, "green");
+          logCuy(`✨ Reaksi Diberikan: ${emojiToReact}`, "green");
         } catch (error) {
           logCuy(`Gagal memberikan reaksi: ${error.message}`, "red");
         }
@@ -82,20 +82,19 @@ async function handleStatusUpdate(sock, msg, {
       saveCounter(global.totalViewed, senderNumber);
       const contactViews = loadCounter(senderNumber);
 
-      // Update counter display
+      // Update counter display in columns
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
       console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60).green.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + " ▸ Status Bot: Aktif ✓".padEnd(60).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + ` ▸ Total Status Dilihat: ${global.totalViewed}`.padEnd(60).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + ` ▸ Status Dilihat dari Kontak: ${contactViews}`.padEnd(60).yellow.bold + "│".cyan.bold);
-      console.log("│".cyan.bold + ` ▸ Nama Kontak: ${senderName}`.padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + "─".repeat(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + " Status Bot        : Aktif ✓".padEnd(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + ` Total Dilihat     : ${global.totalViewed}`.padEnd(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + ` Dilihat Kontak    : ${contactViews}`.padEnd(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + ` Nama Kontak       : ${senderName}`.padEnd(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + ` Nomor Kontak      : ${displaySendernumber}`.padEnd(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + ` Reaksi Diberikan  : ${emojiToReact}`.padEnd(60) + "│".cyan.bold);
+      console.log("│".cyan.bold + ` Status            : ${autoLikeStatus ? "Dilihat & Disukai" : "Dilihat"}`.padEnd(60) + "│".cyan.bold);
       console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold);
-      logCuy(
-        `Berhasil melihat ${
-          autoLikeStatus ? "dan menyukai " : ""
-        }status dari: ${senderName} (${displaySendernumber}) | Total dilihat: ${global.totalViewed}`,
-        "green"
-      );
+      
 
       await handleMediaDownload(sock, msg, {
         downloadMediaStatus,
