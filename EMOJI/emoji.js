@@ -11,4 +11,4 @@ const emojis = [
   "👏"
 ];
 
-module.exports = emojis;
+export default emojis;
