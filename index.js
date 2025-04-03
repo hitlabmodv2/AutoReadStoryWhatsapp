@@ -84,7 +84,6 @@ async function promptLogin() {
     });
   });
 }
-}
 
 async function connectToWhatsApp() {
   await promptLogin();
