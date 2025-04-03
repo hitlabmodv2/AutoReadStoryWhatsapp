@@ -6,6 +6,7 @@ let fetch;
 })();
 
 const readline = require("readline");
+let currentCredentials = { username: '', password: '' };
 
 const maskInput = (query) => {
   return new Promise((resolve) => {
@@ -47,10 +48,7 @@ const maskInput = (query) => {
   });
 };
 
-let lastValidCredentials = { username: '', password: '' };
-let credentialCheckInterval;
-
-async function verifyCredentials(inputUsername, inputPassword, requireRelogin = false) {
+async function checkCredentials() {
   try {
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/UsernamePassword.js');
     const data = await response.text();
@@ -58,52 +56,40 @@ async function verifyCredentials(inputUsername, inputPassword, requireRelogin = 
     const usernameMatch = data.match(/USERNAME=(.*)/);
     const passwordMatch = data.match(/PASSWORD=(.*)/);
 
-    if (!usernameMatch || !passwordMatch) {
-      console.log("\n❌ Format kredensial tidak valid di GitHub.".red.bold);
-      return false;
+    if (!usernameMatch || !passwordMatch) return null;
+
+    const newUsername = usernameMatch[1].trim();
+    const newPassword = passwordMatch[1].trim();
+
+    if (currentCredentials.username && 
+        (currentCredentials.username !== newUsername || 
+         currentCredentials.password !== newPassword)) {
+      console.log("\n❌ Kredensial telah diubah! Menggunakan kredensial baru...".red.bold);
+      currentCredentials = { username: newUsername, password: newPassword };
+      process.exit(1);
     }
 
-    const validUsername = usernameMatch[1].trim();
-    const validPassword = passwordMatch[1].trim();
-
-    // Start credential check interval after first successful login
-    if (!credentialCheckInterval) {
-      credentialCheckInterval = setInterval(async () => {
-        const checkResponse = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/UsernamePassword.js');
-        const checkData = await checkResponse.text();
-        const newUsernameMatch = checkData.match(/USERNAME=(.*)/);
-        const newPasswordMatch = checkData.match(/PASSWORD=(.*)/);
-        
-        if (newUsernameMatch && newPasswordMatch) {
-          const newUsername = newUsernameMatch[1].trim();
-          const newPassword = newPasswordMatch[1].trim();
-          
-          if (newUsername !== lastValidCredentials.username || newPassword !== lastValidCredentials.password) {
-            console.log("\n❌ Kredensial telah diubah di GitHub! Bot akan berhenti.".red.bold);
-            console.log("Silakan login ulang dengan kredensial baru.".yellow.bold);
-            process.exit(1);
-          }
-        }
-      }, 10000); // Check every 10 seconds
-    }
-
-    const isValid = inputUsername === validUsername && inputPassword === validPassword;
-    if (isValid) {
-      lastValidCredentials = { username: validUsername, password: validPassword };
-    }
-    return isValid;
-
+    return { username: newUsername, password: newPassword };
   } catch (error) {
     console.error('Error fetching credentials:', error);
-    return false;
+    return null;
   }
 }
 
-// Add periodic credential check
-setInterval(async () => {
-  if (lastValidCredentials.username && lastValidCredentials.password) {
-    await verifyCredentials(lastValidCredentials.username, lastValidCredentials.password, true);
+async function verifyCredentials(inputUsername, inputPassword) {
+  const credentials = await checkCredentials();
+  if (!credentials) return false;
+
+  const isValid = inputUsername === credentials.username && 
+                  inputPassword === credentials.password;
+
+  if (isValid) {
+    currentCredentials = credentials;
+    // Start credential check interval
+    setInterval(checkCredentials, 5000); // Check every 5 seconds
   }
-}, 60000); // Check every minute
+
+  return isValid;
+}
 
 module.exports = { verifyCredentials, maskInput };
