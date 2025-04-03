@@ -228,9 +228,6 @@ async function connectToWhatsApp() {
         connectToWhatsApp();
       }
     } else if (connection === "open") {
-      console.log("\n╭─━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━─╮");
-      console.log("│ 🤖 BOT AUTO LIHAT STATUS WHATSAPP                                │");
-      console.log("│ ▸ Status Bot: Aktif ✓                                           │");
       loggedInNumber = sock.user.id.split("@")[0].split(":")[0];
       let displayedLoggedInNumber = loggedInNumber;
       if (sensorNomor) {
@@ -239,12 +236,6 @@ async function connectToWhatsApp() {
           "****" +
           displayedLoggedInNumber.slice(-2);
       }
-      console.log(`│ ▸ Nomor Login: ${displayedLoggedInNumber}                                    │`);
-      console.log(`│ ▸ Total Status Dilihat: ${global.totalViewed}                                    │`);
-      console.log("│                                                                 │");
-      console.log("│ Bot siap memproses status!                                     │");
-      console.log("│ Dibuat oleh github.com/Jauhariel                              │");
-      console.log("╰─━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━─╯\n");
       let messageInfo = `Bot *AutoReadStoryWhatsApp* Aktif!
 Kamu berhasil login dengan nomor: ${displayedLoggedInNumber}
 
