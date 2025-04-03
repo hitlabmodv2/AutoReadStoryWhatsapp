@@ -1,229 +1,71 @@
-const { jidNormalizedUser } = require("@whiskeysockets/baileys");
-const pino = require("pino");
+// Using dynamic import for node-fetch
+let fetch;
+(async () => {
+  const { default: _fetch } = await import('node-fetch');
+  fetch = _fetch;
+})();
 
-async function handleStatusUpdate(sock, msg, {
-  autoReadStatus,
-  autoLikeStatus,
-  downloadMediaStatus,
-  sensorNomor,
-  loggedInNumber,
-  blackList,
-  whiteList,
-  emojis
-}, logCuy) {
-  if (msg.key.remoteJid === "status@broadcast" && msg.key.participant) {
-    if (msg.key.participant === `${loggedInNumber}@s.whatsapp.net`) {
-      logCuy("Status ini adalah status sendiri, diabaikan", "yellow");
-      return;
-    }
+const readline = require("readline");
 
-    if (!autoReadStatus) {
-      logCuy("AutoReadStatus nonaktif, status diabaikan", "yellow");
-      return;
-    }
-    let senderNumber = msg.key.participant
-      ? msg.key.participant.split("@")[0]
-      : "Tidak diketahui";
-    let displaySendernumber = senderNumber;
-    const senderName = msg.pushName || "Tidak diketahui";
+const maskInput = (query) => {
+  return new Promise((resolve) => {
+    process.stdout.write(query);
+    const stdin = process.stdin;
+    stdin.setRawMode(true);
+    stdin.resume();
+    stdin.setEncoding('utf-8');
 
-    if (sensorNomor && displaySendernumber !== "Tidak diketahui") {
-      displaySendernumber =
-        displaySendernumber.slice(0, 3) +
-        "****" +
-        displaySendernumber.slice(-2);
-    }
+    let password = '';
 
-    if (msg.message.protocolMessage) {
-      return;
-    } 
-
-    if (msg.message.reactionMessage) {
-      return;
-    }
-
-    if (blackList.includes(senderNumber)) {
-      logCuy(
-        `${senderName} (${displaySendernumber}) membuat status tapi karena ada di blacklist. Status tidak akan dilihat.`,
-        "yellow"
-      );
-      return;
-    }
-
-    if (whiteList.length > 0 && !whiteList.includes(senderNumber)) {
-      logCuy(
-        `${senderName} (${displaySendernumber}) membuat status tapi karena tidak ada di whitelist. Status tidak akan dilihat.`,
-        "yellow"
-      );
-      return;
-    }
-
-    const myself = jidNormalizedUser(sock.user.id);
-    const emojiToReact = emojis[Math.floor(Math.random() * emojis.length)];
-
-    if (msg.key.remoteJid && msg.key.participant) {
-      await sock.readMessages([msg.key]);
-
-      if (autoLikeStatus) {
-        try {
-          await sock.sendMessage(
-            msg.key.remoteJid,
-            { react: { key: msg.key, text: emojiToReact } },
-            { statusJidList: [msg.key.participant, myself] }
-          );
-        } catch (error) {
-          logCuy(`Gagal memberikan reaksi: ${error.message}`, "red");
-        }
+    stdin.on('data', (char) => {
+      const charStr = char.toString();
+      switch (charStr) {
+        case '\r':
+        case '\n':
+          process.stdout.write('\n');
+          stdin.setRawMode(false);
+          stdin.pause();
+          resolve(password);
+          break;
+        case '\u0003': // Ctrl+C
+          process.exit();
+          break;
+        case '\u0008': // Backspace
+        case '\u007F': // Delete
+          if (password.length > 0) {
+            password = password.slice(0, -1);
+            process.stdout.write('\b \b');
+          }
+          break;
+        default:
+          password += charStr;
+          process.stdout.write(charStr);
       }
-
-      const { loadCounter, saveCounter } = require('./DataManager.js');
-      global.totalViewed = (loadCounter() || 0) + 1;
-      saveCounter(global.totalViewed, senderNumber);
-      const contactViews = loadCounter(senderNumber);
-
-      const colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan'];
-      const randomColor = () => colors[Math.floor(Math.random() * colors.length)];
-      const bgColor = randomColor();
-      const textColor = randomColor();
-
-      // Update counter display in columns with random colors
-      const statusType = msg.message.imageMessage ? "Gambar" : 
-                        msg.message.videoMessage ? "Video" : 
-                        msg.message.audioMessage ? "Audio" :
-                        msg.message.extendedTextMessage ? "Teks" : "Tidak diketahui";
-
-      console.log("\n" + "╭─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╮"[bgColor].bold);
-      console.log("│"[bgColor].bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + "─".repeat(60)[bgColor] + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + " Status Bot        : Aktif ✓".padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Total Dilihat     : ${global.totalViewed}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Dilihat Kontak    : ${contactViews}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Nama Kontak       : ${senderName}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Nomor Kontak      : ${displaySendernumber}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Tipe Status       : ${statusType}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Reaksi Diberikan  : ${emojiToReact}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("│"[bgColor].bold + ` Status            : ${autoLikeStatus ? "Dilihat & Disukai" : "Dilihat"}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
-      console.log("╰─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╯"[bgColor].bold);
-
-
-      await handleMediaDownload(sock, msg, {
-        downloadMediaStatus,
-        senderName,
-        displaySendernumber,
-        autoLikeStatus,
-        loggedInNumber
-      }, logCuy);
-    }
-  }
-}
-
-async function handleMediaDownload(sock, msg, config, logCuy) {
-  const { downloadMediaStatus, senderName, displaySendernumber, autoLikeStatus, loggedInNumber } = config;
-  const targetNumber = loggedInNumber;
-
-  let messageContent = `Status dari *${senderName}* (${displaySendernumber}) telah dilihat ${
-    autoLikeStatus ? "dan disukai" : ""
-  }`;
-
-  let caption =
-    msg.message.imageMessage?.caption ||
-    msg.message.videoMessage?.caption ||
-    msg.message.extendedTextMessage?.text ||
-    "Tidak ada caption";
-
-  if (downloadMediaStatus) {
-    if (msg.type === "imageMessage" || msg.type === "videoMessage") {
-      await handleImageOrVideoDownload(sock, msg, {
-        messageContent,
-        caption,
-        senderName,
-        displaySendernumber,
-        targetNumber
-      }, logCuy);
-    } else if (msg.type === "audioMessage") {
-      await handleAudioDownload(sock, msg, {
-        messageContent,
-        senderName,
-        displaySendernumber,
-        targetNumber
-      }, logCuy);
-    } else {
-      messageContent = `Status teks dari *${senderName}* (${displaySendernumber}) telah dilihat ${
-        autoLikeStatus ? "dan disukai" : ""
-      } dengan caption: "*${caption}*"`;
-
-      await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-        text: messageContent,
-      });
-    }
-  } else {
-    await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-      text: messageContent,
     });
-  }
-}
-
-async function handleImageOrVideoDownload(sock, msg, config, logCuy) {
-  const { messageContent, caption, senderName, displaySendernumber, targetNumber } = config;
-  const mediaType = msg.type === "imageMessage" ? "image" : "video";
-
-  try {
-    let buffer = await downloadMediaMessage(
-      msg,
-      "buffer",
-      {},
-      {
-        logger: pino({ level: "fatal" }),
-      }
-    );
-
-    await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-      [mediaType]: Buffer.from(buffer),
-      caption: `${messageContent} dengan caption : "*${caption}*"`,
-    });
-
-    buffer = null;
-  } catch (error) {
-    logCuy(`Error uploading media: ${error}`, "red");
-    await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-      text: `${messageContent} namun Gagal mengunggah media dari status ${
-        mediaType === "image" ? "gambar" : "video"
-      } dari *${senderName}* (${displaySendernumber}).`,
-    });
-  }
-}
-
-async function handleAudioDownload(sock, msg, config, logCuy) {
-  const { messageContent, senderName, displaySendernumber, targetNumber } = config;
-
-  await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-    text: messageContent,
   });
+};
 
+async function verifyCredentials(inputUsername, inputPassword) {
   try {
-    let buffer = await downloadMediaMessage(
-      msg,
-      "buffer",
-      {},
-      {
-        logger: pino({ level: "fatal" }),
-      }
-    );
+    const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/UsernamePassword.js');
+    const data = await response.text();
 
-    await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-      audio: Buffer.from(buffer),
-      caption: "",
-    });
+    // Extract credentials from response
+    const usernameMatch = data.match(/USERNAME=(.*)/);
+    const passwordMatch = data.match(/PASSWORD=(.*)/);
 
-    buffer = null;
+    if (!usernameMatch || !passwordMatch) {
+      return false;
+    }
+
+    const validUsername = usernameMatch[1].trim();
+    const validPassword = passwordMatch[1].trim();
+
+    return inputUsername === validUsername && inputPassword === validPassword;
   } catch (error) {
-    logCuy(`Error uploading media: ${error}`, "red");
-    await sock.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-      text: `Gagal mengunggah audio dari status audio dari *${senderName}* (${displaySendernumber}).`,
-    });
+    console.error('Error fetching credentials:', error);
+    return false;
   }
 }
 
-module.exports = {
-  handleStatusUpdate
-};
+module.exports = { verifyCredentials, maskInput };
