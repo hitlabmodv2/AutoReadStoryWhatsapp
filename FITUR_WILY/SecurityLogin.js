@@ -47,12 +47,13 @@ const maskInput = (query) => {
   });
 };
 
-async function verifyCredentials(inputUsername, inputPassword) {
+let lastValidCredentials = { username: '', password: '' };
+
+async function verifyCredentials(inputUsername, inputPassword, requireRelogin = false) {
   try {
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/UsernamePassword.js');
     const data = await response.text();
 
-    // Extract credentials from response
     const usernameMatch = data.match(/USERNAME=(.*)/);
     const passwordMatch = data.match(/PASSWORD=(.*)/);
 
@@ -63,11 +64,31 @@ async function verifyCredentials(inputUsername, inputPassword) {
     const validUsername = usernameMatch[1].trim();
     const validPassword = passwordMatch[1].trim();
 
-    return inputUsername === validUsername && inputPassword === validPassword;
+    // Check if credentials have changed
+    if (lastValidCredentials.username && lastValidCredentials.password) {
+      if (lastValidCredentials.username !== validUsername || lastValidCredentials.password !== validPassword) {
+        console.log("\n❌ Kredensial telah diubah oleh owner. Mohon login ulang.".red.bold);
+        process.exit(1);
+      }
+    }
+
+    const isValid = inputUsername === validUsername && inputPassword === validPassword;
+    if (isValid) {
+      lastValidCredentials = { username: validUsername, password: validPassword };
+    }
+    return isValid;
+
   } catch (error) {
     console.error('Error fetching credentials:', error);
     return false;
   }
 }
+
+// Add periodic credential check
+setInterval(async () => {
+  if (lastValidCredentials.username && lastValidCredentials.password) {
+    await verifyCredentials(lastValidCredentials.username, lastValidCredentials.password, true);
+  }
+}, 60000); // Check every minute
 
 module.exports = { verifyCredentials, maskInput };
