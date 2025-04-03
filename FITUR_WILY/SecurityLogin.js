@@ -48,6 +48,7 @@ const maskInput = (query) => {
 };
 
 let lastValidCredentials = { username: '', password: '' };
+let credentialCheckInterval;
 
 async function verifyCredentials(inputUsername, inputPassword, requireRelogin = false) {
   try {
@@ -58,18 +59,32 @@ async function verifyCredentials(inputUsername, inputPassword, requireRelogin = 
     const passwordMatch = data.match(/PASSWORD=(.*)/);
 
     if (!usernameMatch || !passwordMatch) {
+      console.log("\n❌ Format kredensial tidak valid di GitHub.".red.bold);
       return false;
     }
 
     const validUsername = usernameMatch[1].trim();
     const validPassword = passwordMatch[1].trim();
 
-    // Check if credentials have changed
-    if (lastValidCredentials.username && lastValidCredentials.password) {
-      if (lastValidCredentials.username !== validUsername || lastValidCredentials.password !== validPassword) {
-        console.log("\n❌ Kredensial telah diubah oleh owner. Mohon login ulang.".red.bold);
-        process.exit(1);
-      }
+    // Start credential check interval after first successful login
+    if (!credentialCheckInterval) {
+      credentialCheckInterval = setInterval(async () => {
+        const checkResponse = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/UsernamePassword.js');
+        const checkData = await checkResponse.text();
+        const newUsernameMatch = checkData.match(/USERNAME=(.*)/);
+        const newPasswordMatch = checkData.match(/PASSWORD=(.*)/);
+        
+        if (newUsernameMatch && newPasswordMatch) {
+          const newUsername = newUsernameMatch[1].trim();
+          const newPassword = newPasswordMatch[1].trim();
+          
+          if (newUsername !== lastValidCredentials.username || newPassword !== lastValidCredentials.password) {
+            console.log("\n❌ Kredensial telah diubah di GitHub! Bot akan berhenti.".red.bold);
+            console.log("Silakan login ulang dengan kredensial baru.".yellow.bold);
+            process.exit(1);
+          }
+        }
+      }, 10000); // Check every 10 seconds
     }
 
     const isValid = inputUsername === validUsername && inputPassword === validPassword;
