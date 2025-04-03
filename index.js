@@ -74,16 +74,16 @@ async function promptLogin() {
       const password = await maskInput("Password: ".yellow.bold);
       const isValid = await verifyCredentials(username, password);
       rl.close();
-        if (!isValid) {
-          console.log("\n❌ Login gagal! Username atau password salah.".red.bold);
-          process.exit(1);
-        }
-        console.log("\n✅ Login berhasil! Memulai bot...".green.bold);
-        console.log("====================================================\n".cyan.bold);
-        resolve();
-      });
+      if (!isValid) {
+        console.log("\n❌ Login gagal! Username atau password salah.".red.bold);
+        process.exit(1);
+      }
+      console.log("\n✅ Login berhasil! Memulai bot...".green.bold);
+      console.log("====================================================\n".cyan.bold);
+      resolve();
     });
   });
+}
 }
 
 async function connectToWhatsApp() {
