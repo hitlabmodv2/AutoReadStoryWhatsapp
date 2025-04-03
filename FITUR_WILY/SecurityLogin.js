@@ -21,7 +21,7 @@ const maskInput = (query) => {
     });
 
     rl._writeToOutput = function _writeToOutput(stringToWrite) {
-      if (stringToWrite.includes(query)) {
+      if (stringToWrite === query) {
         rl.output.write(stringToWrite);
       } else {
         rl.output.write('*');
