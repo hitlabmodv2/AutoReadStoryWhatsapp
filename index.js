@@ -844,7 +844,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
                     "dari",
                     data,
                   );
-                  ifif (!isValid) return;
+                  if (!isValid) return;
                   let displayNumber = data;
                   if (sensorNomor) {
                     displayNumber =
