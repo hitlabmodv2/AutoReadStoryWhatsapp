@@ -1,20 +1,25 @@
-const {
+import {
   makeWASocket,
   DisconnectReason,
   useMultiFileAuthState,
   Browsers,
   jidNormalizedUser,
   downloadMediaMessage,
-} = require("@whiskeysockets/baileys");
-const pino = require("pino");
-const readline = require("readline");
-const fs = require("fs");
-const path = require("path");
+} from "@whiskeysockets/baileys";
+import pino from "pino";
+import readline from "readline";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let connectionAttempts = 0;
 
-const colors = require("colors");
-const moment = require("moment-timezone");
+import colors from "colors";
+import moment from "moment-timezone";
 let useCode = true;
 let loggedInNumber;
 
