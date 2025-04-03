@@ -12,6 +12,6 @@ const handleAutoTyping = async (sock, msg, config) => {
   }
 };
 
-module.exports = {
+export {
   handleAutoTyping
 };
