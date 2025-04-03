@@ -104,9 +104,12 @@ async function verifyCredentials(inputUsername, inputPassword) {
     // Check saved credentials first
     const savedCreds = loadCredentials();
     if (savedCreds && savedCreds.username === inputUsername && savedCreds.password === inputPassword) {
+      // Skip GitHub check if local credentials match
+      lastValidCredentials = { username: inputUsername, password: inputPassword };
       return true;
     }
 
+    // Only check GitHub if local credentials don't match
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
     const data = await response.text();
 
