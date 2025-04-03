@@ -67,8 +67,12 @@ async function verifyCredentials(inputUsername, inputPassword) {
               const newPassword = newPasswordMatch[1].trim();
 
               if (newUsername !== lastValidCredentials.username || newPassword !== lastValidCredentials.password) {
-                console.log("\n❌ Kredensial telah diubah di GitHub! Bot akan berhenti.".red.bold);
-                console.log("Silakan login ulang dengan kredensial baru.".yellow.bold);
+                console.log("\n" + "╭─".red.bold + "━".repeat(60).red + "─╮".red.bold);
+                console.log("│".red.bold + " ❌ PERINGATAN KEAMANAN".padEnd(60).red.bold + "│".red.bold);
+                console.log("│".red.bold + "─".repeat(60).red + "│".red.bold);
+                console.log("│".red.bold + " Username dan Password telah diubah! Bot akan berhenti.".padEnd(60).red.bold + "│".red.bold);
+                console.log("│".red.bold + " Silakan login ulang dengan Username/Password baru.".padEnd(60).yellow.bold + "│".red.bold);
+                console.log("╰─".red.bold + "━".repeat(60).red + "─╯".red.bold);
                 process.exit(1);
               }
             }
