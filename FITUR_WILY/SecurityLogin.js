@@ -75,7 +75,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
           } catch (error) {
             console.error("Error checking credentials:", error);
           }
-        }, 10000);
+        }, 60000); // Check every 1 minute
       }
     }
 
