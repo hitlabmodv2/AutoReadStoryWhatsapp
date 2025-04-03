@@ -1,5 +1,8 @@
-const { jidNormalizedUser } = require("@whiskeysockets/baileys");
-const pino = require("pino");
+
+import { jidNormalizedUser } from "@whiskeysockets/baileys";
+import pino from "pino";
+import { downloadMediaMessage } from "@whiskeysockets/baileys";
+import { loadCounter, saveCounter } from './DataManager.js';
 
 async function handleStatusUpdate(sock, msg, {
   autoReadStatus,
@@ -76,7 +79,6 @@ async function handleStatusUpdate(sock, msg, {
         }
       }
 
-      const { loadCounter, saveCounter } = require('./DataManager.js');
       global.totalViewed = (loadCounter() || 0) + 1;
       saveCounter(global.totalViewed, senderNumber);
       const contactViews = loadCounter(senderNumber);
@@ -86,7 +88,6 @@ async function handleStatusUpdate(sock, msg, {
       const bgColor = randomColor();
       const textColor = randomColor();
       
-      // Update counter display in columns with random colors
       const statusType = msg.message.imageMessage ? "Gambar" : 
                         msg.message.videoMessage ? "Video" : 
                         msg.message.audioMessage ? "Audio" :
@@ -104,7 +105,6 @@ async function handleStatusUpdate(sock, msg, {
       console.log("│"[bgColor].bold + ` Reaksi Diberikan  : ${emojiToReact}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Status            : ${autoLikeStatus ? "Dilihat & Disukai" : "Dilihat"}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("╰─"[bgColor].bold + "━".repeat(60)[bgColor] + "─╯"[bgColor].bold);
-      
 
       await handleMediaDownload(sock, msg, {
         downloadMediaStatus,
@@ -224,6 +224,6 @@ async function handleAudioDownload(sock, msg, config, logCuy) {
   }
 }
 
-module.exports = {
+export {
   handleStatusUpdate
 };

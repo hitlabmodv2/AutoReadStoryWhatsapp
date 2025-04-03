@@ -347,7 +347,7 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
     const msg = messages[0];
     if (!msg.message) return;
 
-    const { handleAutoTyping } = require("./FITUR_WILY/AutoTyping.js");
+    const { handleAutoTyping } = await import("./FITUR_WILY/AutoTyping.js");
     await handleAutoTyping(sock, msg, config);
 
     const { handleStatusUpdate } = require("./FITUR_WILY/CodeAutoReadStory.js");
