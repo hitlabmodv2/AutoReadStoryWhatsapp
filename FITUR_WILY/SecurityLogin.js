@@ -1,17 +1,5 @@
-
 const fetch = require("node-fetch");
 const colors = require("colors");
-
-(async () => {
-  try {
-    const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
-    if (!response.ok) throw new Error('Failed to fetch credentials');
-  } catch (error) {
-    console.log("\n❌ Gagal mengambil kredensial dari GitHub. Pastikan URL valid.".red.bold);
-    process.exit(1);
-  }
-})();
-
 const readline = require("readline");
 
 const maskInput = (query) => {
@@ -44,7 +32,7 @@ const maskInput = (query) => {
 let lastValidCredentials = { username: '', password: '' };
 let credentialCheckInterval;
 
-async function verifyCredentials(inputUsername, inputPassword, requireRelogin = false) {
+async function verifyCredentials(inputUsername, inputPassword) {
   try {
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
     const data = await response.text();
@@ -60,44 +48,42 @@ async function verifyCredentials(inputUsername, inputPassword, requireRelogin = 
     const validUsername = usernameMatch[1].trim();
     const validPassword = passwordMatch[1].trim();
 
-    // Start credential check interval after first successful login
-    if (!credentialCheckInterval) {
-      credentialCheckInterval = setInterval(async () => {
-        const checkResponse = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
-        const checkData = await checkResponse.text();
-        const newUsernameMatch = checkData.match(/USERNAME=(.*)/);
-        const newPasswordMatch = checkData.match(/PASSWORD=(.*)/);
-        
-        if (newUsernameMatch && newPasswordMatch) {
-          const newUsername = newUsernameMatch[1].trim();
-          const newPassword = newPasswordMatch[1].trim();
-          
-          if (newUsername !== lastValidCredentials.username || newPassword !== lastValidCredentials.password) {
-            console.log("\n❌ Kredensial telah diubah di GitHub! Bot akan berhenti.".red.bold);
-            console.log("Silakan login ulang dengan kredensial baru.".yellow.bold);
-            process.exit(1);
-          }
-        }
-      }, 10000); // Check every 10 seconds
-    }
-
     const isValid = inputUsername === validUsername && inputPassword === validPassword;
+
     if (isValid) {
       lastValidCredentials = { username: validUsername, password: validPassword };
-    }
-    return isValid;
 
+      // Start credential check interval
+      if (!credentialCheckInterval) {
+        credentialCheckInterval = setInterval(async () => {
+          try {
+            const checkResponse = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
+            const checkData = await checkResponse.text();
+            const newUsernameMatch = checkData.match(/USERNAME=(.*)/);
+            const newPasswordMatch = checkData.match(/PASSWORD=(.*)/);
+
+            if (newUsernameMatch && newPasswordMatch) {
+              const newUsername = newUsernameMatch[1].trim();
+              const newPassword = newPasswordMatch[1].trim();
+
+              if (newUsername !== lastValidCredentials.username || newPassword !== lastValidCredentials.password) {
+                console.log("\n❌ Kredensial telah diubah di GitHub! Bot akan berhenti.".red.bold);
+                console.log("Silakan login ulang dengan kredensial baru.".yellow.bold);
+                process.exit(1);
+              }
+            }
+          } catch (error) {
+            console.error("Error checking credentials:", error);
+          }
+        }, 10000); // Check every 10 seconds
+      }
+    }
+
+    return isValid;
   } catch (error) {
     console.error('Error fetching credentials:', error);
     return false;
   }
 }
-
-// Add periodic credential check
-setInterval(async () => {
-  if (lastValidCredentials.username && lastValidCredentials.password) {
-    await verifyCredentials(lastValidCredentials.username, lastValidCredentials.password, true);
-  }
-}, 60000); // Check every minute
 
 module.exports = { verifyCredentials, maskInput };
