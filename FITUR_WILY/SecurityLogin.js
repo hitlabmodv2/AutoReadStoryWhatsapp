@@ -60,4 +60,4 @@ async function verifyCredentials(inputUsername, inputPassword) {
   }
 }
 
-module.exports = { verifyCredentials };
+module.exports = { verifyCredentials, maskInput };
