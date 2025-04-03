@@ -93,6 +93,9 @@ const maskInput = (query) => {
   });
 };
 
+// Import required functions early
+const { loadCounter, saveCounter, incrementRestartCounter, loadCredentials, saveCredentials } = await import("./FITUR_WILY/DataManager.js");
+
 let lastValidCredentials = { username: '', password: '' };
 let credentialCheckInterval;
 
@@ -376,7 +379,6 @@ info status fitur:
 Ketik *#menu* untuk melihat menu perintah yang tersedia.
 
 SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
-      const { loadCounter, incrementRestartCounter, loadCredentials, saveCredentials } = await import("./FITUR_WILY/DataManager.js");
       global.totalViewed = loadCounter();
       const totalRestarts = incrementRestartCounter();
 
