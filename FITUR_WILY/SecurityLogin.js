@@ -9,14 +9,18 @@ const readline = require("readline");
 
 const maskInput = (query) => {
   return new Promise((resolve) => {
-    console.log(query);
+    console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
+    console.log("│".cyan.bold + " LOGIN SECURITY".padEnd(60).yellow.bold + "│".cyan.bold);
+    console.log("│".cyan.bold + "─".repeat(60).cyan + "│".cyan.bold);
+    console.log("│".cyan.bold + ` ${query}`.padEnd(60).white + "│".cyan.bold);
     const stdin = process.stdin;
     stdin.setRawMode(true);
     stdin.resume();
     stdin.setEncoding('utf-8');
 
     let password = '';
-    process.stdout.write("Password: ");
+    process.stdout.write("│".cyan.bold + " Password: ".padEnd(60).white + "│".cyan.bold + "\r");
+    process.stdout.write("│".cyan.bold + " Password: ".white);
 
     stdin.on('data', (char) => {
       const charStr = char.toString();
@@ -42,12 +46,11 @@ const maskInput = (query) => {
           password += charStr;
           process.stdout.clearLine(0);
           process.stdout.cursorTo(0);
-          process.stdout.write("Password: ");
-          for (let i = 0; i < password.length; i++) {
-            process.stdout.write("*");
-          }
+          process.stdout.write("│".cyan.bold + " Password: ".white + password + " ".repeat(49 - password.length) + "│".cyan.bold);
       }
     });
+
+    console.log("\n" + "╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold);
   });
 };
 
