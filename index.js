@@ -68,12 +68,12 @@ async function promptLogin() {
     output: process.stdout
   });
 
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     console.log("\n==================== LOGIN SECURITY ====================".cyan.bold);
-    rl.question("Username: ".yellow.bold, (username) => {
-      rl.question("Password: ".yellow.bold, async (password) => {
-        const isValid = await verifyCredentials(username, password);
-        rl.close();
+    rl.question("Username: ".yellow.bold, async (username) => {
+      const password = await maskInput("Password: ".yellow.bold);
+      const isValid = await verifyCredentials(username, password);
+      rl.close();
         if (!isValid) {
           console.log("\n❌ Login gagal! Username atau password salah.".red.bold);
           process.exit(1);
