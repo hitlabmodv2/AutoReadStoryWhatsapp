@@ -60,7 +60,35 @@ const updateConfig = (key, value) => {
 
 let welcomeMessage = false;
 
+const readline = require("readline");
+const { verifyCredentials } = require("./FITUR_WILY/SecurityLogin.js");
+
+async function promptLogin() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  return new Promise((resolve) => {
+    console.log("\n==================== LOGIN SECURITY ====================".cyan.bold);
+    rl.question("Username: ".yellow.bold, (username) => {
+      rl.question("Password: ".yellow.bold, async (password) => {
+        const isValid = await verifyCredentials(username, password);
+        rl.close();
+        if (!isValid) {
+          console.log("\n❌ Login gagal! Username atau password salah.".red.bold);
+          process.exit(1);
+        }
+        console.log("\n✅ Login berhasil! Memulai bot...".green.bold);
+        console.log("====================================================\n".cyan.bold);
+        resolve();
+      });
+    });
+  });
+}
+
 async function connectToWhatsApp() {
+  await promptLogin();
   const sessionPath = path.join(__dirname, "sessions");
   if (!fs.existsSync(sessionPath)) {
     fs.mkdirSync(sessionPath, { recursive: true });

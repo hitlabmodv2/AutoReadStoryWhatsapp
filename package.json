@@ -20,6 +20,7 @@
     "colors": "latest",
     "express": "^5.1.0",
     "moment-timezone": "latest",
+    "node-fetch": "^3.3.2",
     "pino": "^9.6.0",
     "qrcode-terminal": "latest"
   }
