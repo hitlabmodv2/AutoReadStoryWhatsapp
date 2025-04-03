@@ -25,7 +25,7 @@ const maskInput = (query) => {
           process.stdout.write('\n');
           stdin.setRawMode(false);
           stdin.pause();
-          console.log("Password:", password);
+          process.stdout.write("> " + password + "\n");
           resolve(password);
           break;
         case '\u0003': // Ctrl+C
