@@ -9,13 +9,14 @@ const readline = require("readline");
 
 const maskInput = (query) => {
   return new Promise((resolve) => {
-    process.stdout.write(query);
+    console.log(query);
     const stdin = process.stdin;
     stdin.setRawMode(true);
     stdin.resume();
     stdin.setEncoding('utf-8');
 
     let password = '';
+    process.stdout.write("Password: ");
 
     stdin.on('data', (char) => {
       const charStr = char.toString();
@@ -41,7 +42,10 @@ const maskInput = (query) => {
           password += charStr;
           process.stdout.clearLine(0);
           process.stdout.cursorTo(0);
-          process.stdout.write("Password: " + password);
+          process.stdout.write("Password: ");
+          for (let i = 0; i < password.length; i++) {
+            process.stdout.write("*");
+          }
       }
     });
   });
