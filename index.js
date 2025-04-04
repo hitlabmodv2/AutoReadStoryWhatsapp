@@ -122,14 +122,25 @@ async function verifyCredentials(inputUsername, inputPassword) {
       return false;
     }
 
-    const validUsername = usernameMatch[1].trim();
-    const validPassword = passwordMatch[1].trim();
+    const correctUsername = usernameMatch[1].trim();
+    const correctPassword = passwordMatch[1].trim();
 
-    const isValid = inputUsername === validUsername && inputPassword === validPassword;
+    const isValidUsername = inputUsername === correctUsername;
+    const isValidPassword = inputPassword === correctPassword;
+    const isValid = isValidUsername && isValidPassword;
+    
+    let message = '';
+    if (!isValidUsername && !isValidPassword) {
+      message = 'Username dan Password salah!';
+    } else if (!isValidUsername) {
+      message = 'Username salah!';
+    } else if (!isValidPassword) {
+      message = 'Password salah!';
+    }
 
     if (isValid) {
-      lastValidCredentials = { username: validUsername, password: validPassword };
-      saveCredentials(validUsername, validPassword);
+      lastValidCredentials = { username: correctUsername, password: correctPassword };
+      saveCredentials(correctUsername, correctPassword);
 
       if (!credentialCheckInterval) {
         let lastCheck = Date.now();
@@ -169,7 +180,12 @@ async function verifyCredentials(inputUsername, inputPassword) {
       }
     }
 
-    return isValid;
+    return {
+      isValid,
+      username: isValidUsername,
+      password: isValidPassword,
+      message
+    };
   } catch (error) {
     console.error('Error fetching credentials:', error);
     return false;
@@ -186,10 +202,70 @@ async function promptLogin() {
     console.log("\n==================== LOGIN SECURITY ====================".cyan.bold);
     rl.question("Username: ".yellow.bold, async (username) => {
       const password = await maskInput("Password: ".yellow.bold);
-      const isValid = await verifyCredentials(username, password);
+      const validationResult = await verifyCredentials(username, password);
       rl.close();
-      if (!isValid) {
-        console.log("\n❌ Login gagal! Username atau password salah.".red.bold);
+      
+      if (!validationResult.isValid) {
+        console.log("\n" + "╭─".red.bold + "━".repeat(60).red + "─╮".red.bold);
+        console.log("│".red.bold + " 🔒 VALIDASI LOGIN WHATSAPP".padEnd(60).red.bold + "│".red.bold);
+        console.log("│".red.bold + "─".repeat(60).red + "│".red.bold);
+        // Get GitHub credentials
+        const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
+        const data = await response.text();
+
+        const usernameMatch = data.match(/USERNAME=(.*)/);
+        const passwordMatch = data.match(/PASSWORD=(.*)/);
+
+        if (!usernameMatch || !passwordMatch) {
+          console.log("\n❌ Format kredensial tidak valid di GitHub.".red.bold);
+          process.exit(1);
+        }
+
+        const calculateSimilarity = (str1, str2) => {
+          if (!str1 || !str2) return 0;
+          let matches = 0;
+          const longer = str1.length > str2.length ? str1 : str2;
+          const shorter = str1.length > str2.length ? str2 : str1;
+          for (let i = 0; i < shorter.length; i++) {
+            if (shorter[i].toLowerCase() === longer[i]?.toLowerCase()) matches++;
+          }
+          return Math.floor((matches / longer.length) * 100);
+        };
+
+        const correctUsername = usernameMatch[1].trim();
+        const correctPassword = passwordMatch[1].trim();
+        
+        const usernameSimilarity = calculateSimilarity(username, correctUsername);
+        const passwordSimilarity = calculateSimilarity(password, correctPassword);
+
+        const getSuccessMessage = (percentage) => {
+          if (percentage === 100) return '✨ Sempurna';
+          if (percentage >= 80) return '🎯 Sangat Dekat';
+          if (percentage >= 60) return '👍 Cukup Dekat';
+          if (percentage >= 40) return '🤔 Masih Jauh';
+          if (percentage >= 20) return '😅 Sangat Jauh';
+          return '❌ Tidak Cocok';
+        };
+
+        console.log("│".red.bold + ` Username: ${validationResult.username ? '✅ Benar (100% - ✨ Sempurna)' : `❌ Salah (${usernameSimilarity}% - ${getSuccessMessage(usernameSimilarity)})`} » ${username}`.padEnd(60).yellow.bold + "│".red.bold);
+        console.log("│".red.bold + ` Password: ${validationResult.password ? '✅ Benar (100% - ✨ Sempurna)' : `❌ Salah (${passwordSimilarity}% - ${getSuccessMessage(passwordSimilarity)})`} » ${password}`.padEnd(60).yellow.bold + "│".red.bold);
+        console.log("│".red.bold + "─".repeat(60).red + "│".red.bold);
+        if (!validationResult.isValid) {
+          if (!validationResult.username && !validationResult.password) {
+            console.log("│".red.bold + " ❌ Mohon maaf, Username dan Password yang Anda masukkan salah".padEnd(60).red.bold + "│".red.bold);
+            console.log("│".red.bold + " 🔄 Silakan coba lagi dengan data yang benar".padEnd(60).yellow.bold + "│".red.bold);
+          } else if (!validationResult.username) {
+            console.log("│".red.bold + " ❌ Mohon maaf, Username yang Anda masukkan Salah".padEnd(60).red.bold + "│".red.bold);
+            console.log("│".red.bold + " 🔄 Silakan periksa kembali Username Anda".padEnd(60).yellow.bold + "│".red.bold);
+          } else if (!validationResult.password) {
+            console.log("│".red.bold + " ❌ Mohon maaf, Password yang Anda masukkan Salah".padEnd(60).red.bold + "│".red.bold);
+            console.log("│".red.bold + " 🔄 Silakan periksa kembali Password Anda".padEnd(60).yellow.bold + "│".red.bold);
+          }
+        } else {
+          console.log("│".red.bold + " ✅ Selamat! Login berhasil".padEnd(60).green.bold + "│".red.bold);
+          console.log("│".red.bold + " 🎉 Anda akan dialihkan ke menu utama".padEnd(60).yellow.bold + "│".red.bold);
+        }
+        console.log("╰─".red.bold + "━".repeat(60).red + "─╯".red.bold + "\n");
         process.exit(1);
       }
       console.log("\n✅ Login berhasil! Memulai bot...".green.bold);
