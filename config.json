@@ -1,5 +1,6 @@
 {
     "autodeletesessions": 100,
+    "SpeedReadStory": 60000,
     "autoRecord": true,
     "autoTyping": false,
     "autoReadStatus": true,
