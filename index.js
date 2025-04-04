@@ -503,6 +503,11 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
       );
       console.log(
         "│".cyan.bold +
+          ` ▸ Kecepatan Lihat   : ${(config.SpeedReadStory/1000)} Detik`.padEnd(60).yellow.bold +
+          "│".cyan.bold,
+      );
+      console.log(
+        "│".cyan.bold +
           ` ▸ Total Status Dilihat: ${global.totalViewed}`.padEnd(60).yellow.bold +
           "│".cyan.bold,
       );
