@@ -1,8 +1,15 @@
-
 import { jidNormalizedUser } from "@whiskeysockets/baileys";
 import pino from "pino";
 import { downloadMediaMessage } from "@whiskeysockets/baileys";
 import { loadCounter, saveCounter } from './DataManager.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const config = JSON.parse(fs.readFileSync(path.join(dirname(__dirname), 'config.json'), 'utf-8'));
 
 async function handleStatusUpdate(sock, msg, {
   autoReadStatus,
@@ -12,7 +19,8 @@ async function handleStatusUpdate(sock, msg, {
   loggedInNumber,
   blackList,
   whiteList,
-  emojis
+  emojis,
+  statusDelay
 }, logCuy) {
   if (msg.key.remoteJid === "status@broadcast" && msg.key.participant) {
     if (msg.key.participant === `${loggedInNumber}@s.whatsapp.net`) {
@@ -65,6 +73,8 @@ async function handleStatusUpdate(sock, msg, {
     const emojiToReact = emojis[Math.floor(Math.random() * emojis.length)];
 
     if (msg.key.remoteJid && msg.key.participant) {
+      // Add delay before reading and liking status
+      await new Promise(resolve => setTimeout(resolve, config.SpeedReadStory || 2000));
       await sock.readMessages([msg.key]);
 
       if (autoLikeStatus) {
@@ -87,7 +97,7 @@ async function handleStatusUpdate(sock, msg, {
       const randomColor = () => colors[Math.floor(Math.random() * colors.length)];
       const bgColor = randomColor();
       const textColor = randomColor();
-      
+
       const statusType = msg.message.imageMessage ? "Gambar" : 
                         msg.message.videoMessage ? "Video" : 
                         msg.message.audioMessage ? "Audio" :
