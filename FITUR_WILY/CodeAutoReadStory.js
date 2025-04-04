@@ -107,6 +107,7 @@ async function handleStatusUpdate(sock, msg, {
       console.log("│"[bgColor].bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + "─".repeat(60)[bgColor] + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + " Status Bot        : Aktif ✓".padEnd(60)[textColor].bold + "│"[bgColor].bold);
+      console.log("│"[bgColor].bold + ` Kecepatan Lihat   : ${(config.SpeedReadStory/1000)} Detik`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Total Dilihat     : ${global.totalViewed}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Dilihat Kontak    : ${contactViews}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
       console.log("│"[bgColor].bold + ` Nama Kontak       : ${senderName}`.padEnd(60)[textColor].bold + "│"[bgColor].bold);
