@@ -486,47 +486,15 @@ SC : https://github.com/jauhariel/AutoReadStoryWhatsapp`;
       const totalRestarts = incrementRestartCounter();
 
       console.log("\n" + "╭─".cyan.bold + "━".repeat(60).cyan + "─╮".cyan.bold);
-      console.log(
-        "│".cyan.bold +
-          " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60).green.bold +
-          "│".cyan.bold,
-      );
-      console.log(
-        "│".cyan.bold +
-          " ▸ Status Bot: Aktif ✓".padEnd(60).yellow.bold +
-          "│".cyan.bold,
-      );
-      console.log(
-        "│".cyan.bold +
-          ` ▸ Nomor Login: ${displayedLoggedInNumber}`.padEnd(60).yellow.bold +
-          "│".cyan.bold,
-      );
-      console.log(
-        "│".cyan.bold +
-          ` ▸ Kecepatan Lihat   : ${(config.SpeedReadStory/1000)} Detik`.padEnd(60).yellow.bold +
-          "│".cyan.bold,
-      );
-      console.log(
-        "│".cyan.bold +
-          ` ▸ Total Status Dilihat: ${global.totalViewed}`.padEnd(60).yellow.bold +
-          "│".cyan.bold,
-      );
-      console.log(
-        "│".cyan.bold +
-          ` ▸ Total Bot Restart: ${totalRestarts}`.padEnd(60).yellow.bold +
-          "│".cyan.bold,
-      );
+      console.log("│".cyan.bold + " 🤖 BOT AUTO LIHAT STATUS WHATSAPP".padEnd(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " ▸ Status Bot : Aktif ✓".padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Nomor Login : ${displayedLoggedInNumber}`.padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Kecepatan Lihat : ${(config.SpeedReadStory/1000)} Detik`.padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Total Status View : ${global.totalViewed}`.padEnd(60).yellow.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + ` ▸ Total Bot Restart : ${totalRestarts}`.padEnd(60).yellow.bold + "│".cyan.bold);
       console.log("│".cyan.bold + " ".repeat(60) + "│".cyan.bold);
-      console.log(
-        "│".cyan.bold +
-          " Bot siap memproses status!".padEnd(60).green.bold +
-          "│".cyan.bold,
-      );
-      console.log(
-        "│".cyan.bold +
-          " Dibuat oleh github.com/Jauhariel".padEnd(60).red.bold +
-          "│".cyan.bold,
-      );
+      console.log("│".cyan.bold + " Bot siap memproses status!".padEnd(60).green.bold + "│".cyan.bold);
+      console.log("│".cyan.bold + " Dibuat oleh github.com/Jauhariel".padEnd(60).red.bold + "│".cyan.bold);
       console.log("╰─".cyan.bold + "━".repeat(60).cyan + "─╯".cyan.bold + "\n");
 
       if (!welcomeMessage) {
