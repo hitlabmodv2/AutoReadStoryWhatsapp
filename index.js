@@ -103,7 +103,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
   try {
     // Check saved credentials first
     const savedCreds = loadCredentials();
-    
+
     // If we have saved credentials and no input credentials, use saved ones
     if (savedCreds && !inputUsername && !inputPassword) {
       inputUsername = savedCreds.username;
@@ -128,7 +128,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
     const isValidUsername = inputUsername === correctUsername;
     const isValidPassword = inputPassword === correctPassword;
     const isValid = isValidUsername && isValidPassword;
-    
+
     let message = '';
     if (!isValidUsername && !isValidPassword) {
       message = 'Username dan Password salah!';
@@ -144,7 +144,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
 
       if (!credentialCheckInterval) {
         let lastCheck = Date.now();
-        
+
         credentialCheckInterval = setInterval(async () => {
           try {
             const checkResponse = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
@@ -166,7 +166,7 @@ async function verifyCredentials(inputUsername, inputPassword) {
                 console.log("│".red.bold + " Username dan Password telah diubah! Bot akan berhenti.".padEnd(60).red.bold + "│".red.bold);
                 console.log("│".red.bold + " Silakan login ulang dengan Username/Password baru.".padEnd(60).yellow.bold + "│".red.bold);
                 console.log("╰─".red.bold + "━".repeat(60).red + "─╯".red.bold);
-                
+
                 // Clear saved credentials
                 saveCredentials('', '');
                 clearInterval(credentialCheckInterval);
@@ -199,12 +199,18 @@ async function promptLogin() {
   });
 
   return new Promise(async (resolve) => {
-    console.log("\n==================== LOGIN SECURITY ====================".cyan.bold);
-    rl.question("Username: ".yellow.bold, async (username) => {
-      const password = await maskInput("Password: ".yellow.bold);
+    console.log("\n╔════════════════════════════════════════════════════════════╗".cyan.bold);
+    console.log("║                     LOGIN SECURITY                         ║".cyan.bold);
+    console.log("╚════════════════════════════════════════════════════════════╝".cyan.bold);
+    console.log("║".cyan.bold);
+    rl.question("║ Username ➜ ".yellow.bold, async (username) => {
+      console.log("║".cyan.bold);
+      const password = await maskInput("║ Password ➜ ".yellow.bold);
+      console.log("║".cyan.bold);
+      console.log("╚═══════════════════════════════════════════════════════════════".cyan.bold);
       const validationResult = await verifyCredentials(username, password);
       rl.close();
-      
+
       if (!validationResult.isValid) {
         console.log("\n" + "╭─".red.bold + "━".repeat(60).red + "─╮".red.bold);
         console.log("│".red.bold + " 🔒 VALIDASI LOGIN WHATSAPP".padEnd(60).red.bold + "│".red.bold);
@@ -234,7 +240,7 @@ async function promptLogin() {
 
         const correctUsername = usernameMatch[1].trim();
         const correctPassword = passwordMatch[1].trim();
-        
+
         const usernameSimilarity = calculateSimilarity(username, correctUsername);
         const passwordSimilarity = calculateSimilarity(password, correctPassword);
 
