@@ -103,13 +103,14 @@ async function verifyCredentials(inputUsername, inputPassword) {
   try {
     // Check saved credentials first
     const savedCreds = loadCredentials();
-    if (savedCreds && savedCreds.username === inputUsername && savedCreds.password === inputPassword) {
-      // Skip GitHub check if local credentials match
-      lastValidCredentials = { username: inputUsername, password: inputPassword };
-      return true;
+    
+    // If we have saved credentials and no input credentials, use saved ones
+    if (savedCreds && !inputUsername && !inputPassword) {
+      inputUsername = savedCreds.username;
+      inputPassword = savedCreds.password;
     }
 
-    // Only check GitHub if local credentials don't match
+    // Get GitHub credentials
     const response = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
     const data = await response.text();
 
@@ -131,6 +132,8 @@ async function verifyCredentials(inputUsername, inputPassword) {
       saveCredentials(validUsername, validPassword);
 
       if (!credentialCheckInterval) {
+        let lastCheck = Date.now();
+        
         credentialCheckInterval = setInterval(async () => {
           try {
             const checkResponse = await fetch('https://raw.githubusercontent.com/hitlabmodv2/SECURITY/refs/heads/main/keamanan.json');
@@ -142,6 +145,9 @@ async function verifyCredentials(inputUsername, inputPassword) {
               const newUsername = newUsernameMatch[1].trim();
               const newPassword = newPasswordMatch[1].trim();
 
+              const timeSinceLastCheck = Date.now() - lastCheck;
+              lastCheck = Date.now();
+
               if (newUsername !== lastValidCredentials.username || newPassword !== lastValidCredentials.password) {
                 console.log("\n" + "╭─".red.bold + "━".repeat(60).red + "─╮".red.bold);
                 console.log("│".red.bold + " ❌ PERINGATAN KEAMANAN".padEnd(60).red.bold + "│".red.bold);
@@ -149,13 +155,17 @@ async function verifyCredentials(inputUsername, inputPassword) {
                 console.log("│".red.bold + " Username dan Password telah diubah! Bot akan berhenti.".padEnd(60).red.bold + "│".red.bold);
                 console.log("│".red.bold + " Silakan login ulang dengan Username/Password baru.".padEnd(60).yellow.bold + "│".red.bold);
                 console.log("╰─".red.bold + "━".repeat(60).red + "─╯".red.bold);
+                
+                // Clear saved credentials
+                saveCredentials('', '');
+                clearInterval(credentialCheckInterval);
                 process.exit(1);
               }
             }
           } catch (error) {
             console.error("Error checking credentials:", error);
           }
-        }, 60000); // Check every 1 minute
+        }, Math.max(60000 - (Date.now() - lastCheck), 1000)); // Maintain 1 minute interval
       }
     }
 
@@ -190,7 +200,15 @@ async function promptLogin() {
 }
 
 async function connectToWhatsApp() {
-  await promptLogin();
+  const savedCreds = loadCredentials();
+  if (!savedCreds || !savedCreds.username || !savedCreds.password) {
+    await promptLogin();
+  } else {
+    const isValid = await verifyCredentials();
+    if (!isValid) {
+      await promptLogin();
+    }
+  }
   const sessionPath = path.join(__dirname, "sessions");
   if (!fs.existsSync(sessionPath)) {
     fs.mkdirSync(sessionPath, { recursive: true });
