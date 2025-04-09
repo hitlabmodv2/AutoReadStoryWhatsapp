@@ -1,0 +1,35 @@
+{
+    "════════ App Settings ════════": "",
+    "botname": "Auto Read Story",
+    "idSaluran": "120363312297133690@newsletter",
+    "namaSaluran": "Info Seputar Anime Dll 👤",
+    "versi": "3.0.0",
+    "════════ Auto Features ════════": "",
+    "autoKickStory": false,
+    "autoLikeStatus": true,
+    "autoReadStatus": true,
+    "autoRecord": false,
+    "autoTyping": true,
+    "════════ Protection Features ════════": "",
+    "antiCallV2": false,
+    "antitagswv2": true,
+    "antiTelpon": false,
+    "════════ Security & Privacy ════════": "",
+    "autodeletesessions": 100,
+    "downloadMediaStatus": false,
+    "lewatierror": true,
+    "sensorNomor": true,
+    "════════ Speed Settings ════════": "",
+    "SpeedReadStory": 5000,
+    "════════ User Lists ════════": "",
+    "blackList": [
+        "628987654321",
+        "628123456789"
+    ],
+    "emojis": [],
+    "globalOwners": [
+        "6289688206739",
+        "6282263096788"
+    ],
+    "whiteList": []
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Wily Kun",
+  "version": "3.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index"
+  },
+  "keywords": [
+    "auto-read-story",
+    "whatsapp-bot",
+    "whatsapp-status-viewer",
+    "auto-view-whatsapp-story",
+    "bot-whatsapp"
+  ],
+  "author": "Wily Kun",
+  "license": "MIT",
+  "description": "Auto Read Story/Status WhatsApp adalah bot sederhana yang memungkinkan kamu untuk melihat status/story teman-teman WhatsApp secara otomatis, sehingga kamu menjadi orang pertama yang melihat story mereka.",
+  "dependencies": {
+    "@whiskeysockets/baileys": "github:jauhariel/Baileys",
+    "axios": "^1.8.4",
+    "cfonts": "^3.3.0",
+    "chalk": "^5.4.1",
+    "colors": "latest",
+    "express": "^5.1.0",
+    "libphonenumber-js": "^1.12.6",
+    "moment-timezone": "latest",
+    "node-fetch": "^3.3.2",
+    "pino": "^9.6.0",
+    "qrcode-terminal": "^0.12.0",
+    "readline": "^1.3.0"
+  }
+}

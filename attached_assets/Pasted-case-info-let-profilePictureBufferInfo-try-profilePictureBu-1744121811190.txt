@@ -1,0 +1,90 @@
+case "info":
+          let profilePictureBufferInfo;
+          try {
+            profilePictureBufferInfo = await sock.profilePictureUrl(sock.user.id, 'image').then(async url => {
+              const response = await fetch(url);
+              const buffer = await response.arrayBuffer();
+              return Buffer.from(buffer);
+            });
+          } catch (error) {
+            console.log("Error fetching profile picture:", error);
+            profilePictureBufferInfo = fs.readFileSync("./generated-icon.png");
+          }
+
+          const formatList = (list) =>
+            list
+              .map((number, index) =>{
+                let displayNumber = number;
+                if (sensorNomor) {
+                  displayNumber =
+                    displayNumber.slice(0, 3) +
+                    "****" +
+                    displayNumber.slice(-2);
+                }
+                return `\u25CF ${displayNumber}`;
+              })
+              .join("\n");
+          const formatEmojiList = (list) =>
+            list.map((emoji, index) => `${emoji}`).join(", ");
+
+          const blacklistMessage =
+            blackList.length > 0
+              ? `╭──────『 Blacklist 』──────╮\n${formatList(blackList)}\n╰─────────────────────────╯`
+              : "╭──────『 Blacklist 』──────╮\n┃ Blacklist kosong.\n╰─────────────────────────╯";
+          const whitelistMessage =
+            whiteList.length > 0
+              ? `╭──────『 Whitelist 』──────╮\n${formatList(whiteList)}\n╰─────────────────────────╯`
+              : "╭──────『 Whitelist 』──────╮\n┃ Whitelist kosong.\n╰─────────────────────────╯";
+          const emojisMessage =
+            emojis.length > 0
+              ? `╭──────『 Emoji List 』──────╮\n┃ ${formatEmojiList(emojis)}\n╰─────────────────────────╯`
+              : "╭──────『 Emoji List 』──────╮\n┃ Emoji list kosong.\n╰─────────────────────────╯";
+          const listMessage = `\n\n${blacklistMessage}\n\n${whitelistMessage}\n\n${emojisMessage}\n\n╭──────『 Perintah 』──────╮\n┃ • \`#add\` - Tambah nomor/emoji\n┃ • \`#remove\` - Hapus nomor/emoji\n┃ • \`#on\` - Aktifkan fitur\n┃ • \`#off\` - Nonaktifkan fitur\n┃ • \`#menu\` - Lihat menu\n╰─────────────────────────╯`;
+
+          const infoMessage = `╭──────『 Informasi Status 』──────╮
+
+➤ Fitur Aktif:
+${autoReadStatus ? "┃ ✦ Auto Read Status: *Aktif*\n" : ""}${autoLikeStatus ? "┃ ✦ Auto Like Status: *Aktif*\n" : ""}${downloadMediaStatus ? "┃ ✦ Download Media Status: *Aktif*\n" : ""}${sensorNomor ? "┃ ✦ Sensor Nomor: *Aktif*\n" : ""}${antiTelpon ? "┃ ✦ Anti Telpon: *Aktif*\n" : ""}${autoKickStory ? "┃ ✦ Auto Kick tag Story: *Aktif*\n" : ""}${autoTypingStatus ? "┃ ✦ Auto Typing: *Aktif*\n" : ""}${config.autoRecord ? "┃ ✦ Auto Record: *Aktif*\n" : ""}${config.lewatierror ? "┃ ✦ Lewati Error: *Aktif*\n" : ""}${config.antitagswv2 ? "┃ ✦ Anti Tag Story V2: *Aktif*\n" : ""}${config.antiCallV2 ? "┃ ✦ Anti Call V2: *Aktif*\n" : ""}┃
+➤ Fitur Nonaktif:
+${!autoReadStatus ? "┃ ✦ Auto Read Status: *Nonaktif*\n" : ""}${!autoLikeStatus ? "┃ ✦ Auto Like Status: *Nonaktif*\n" : ""}${!downloadMediaStatus ? "┃ ✦ Download Media Status: *Nonaktif*\n" : ""}${!sensorNomor ? "┃ ✦ Sensor Nomor: *Nonaktif*\n" : ""}${!antiTelpon ? "┃ ✦ Anti Telpon: *Nonaktif*\n" : ""}${!autoKickStory ? "┃ ✦ Auto Kick tag Story: *Nonaktif*\n" : ""}${!autoTypingStatus ? "┃ ✦ Auto Typing: *Nonaktif*\n" : ""}${!config.autoRecord ? "┃ ✦ Auto Record: *Nonaktif*\n" : ""}${!config.lewatierror ? "┃ ✦ Lewati Error: *Nonaktif*\n" : ""}${!config.antitagswv2 ? "┃ ✦ Anti Tag Story V2: *Nonaktif*\n" : ""}${!config.antiCallV2 ? "┃ ✦ Anti Call V2: *Nonaktif*\n" : ""}
+╰───────────────────────────╯`;
+
+          await sock.sendMessage(
+            msg.key.remoteJid, // Send to original chat
+            {
+              image: profilePictureBufferInfo,
+              caption: infoMessage + listMessage,
+              headerType: 1,
+              viewOnce: true,
+              document: fs.readFileSync("./package.json"),
+              fileName: 'Alamak.jpeg',
+              mimetype: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+              fileLength: 9999999,
+              contextInfo: {
+                isForwarded: true,
+                mentionedJid: [`${loggedInNumber}@s.whatsapp.net`],
+                forwardedNewsletterMessageInfo: {
+                  newsletterJid: config.idSaluran,
+                  newsletterName: config.namaSaluran
+                },
+                externalAdReply: {
+                  title: `${config.botname} - ${config.versi}`,
+                  body: `Hari ini : ${(() => {
+                    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                    const now = new Date();
+                    const day = days[now.getDay()];
+                    const date = String(now.getDate()).padStart(2, '0');
+                    const month = months[now.getMonth()];
+                    const year = now.getFullYear();
+                    return `${day}/${date}/${month}/${year}`;
+                  })()}`,
+                  thumbnail: profilePictureBufferInfo,
+                  sourceUrl: 'https://whatsapp.com/channel/' + config.idSaluran,
+                  mediaType: 1,
+                  renderLargerThumbnail: true
+                }
+              }
+            }
+          );
+          break; tolong simbol garis pemisahnay ganti yang lebih bagus dan rapih

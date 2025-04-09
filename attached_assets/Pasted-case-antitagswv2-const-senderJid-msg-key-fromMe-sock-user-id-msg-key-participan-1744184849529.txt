@@ -1,0 +1,61 @@
+case "antitagswv2":
+          const senderJid = msg.key.fromMe ? sock.user.id : (msg.key.participant || msg.key.remoteJid);
+          const senderNumber = senderJid.split('@')[0].split(':')[0];
+          const isGlobalOwner = config.globalOwners?.includes(senderNumber);
+
+          if (!msg.key.fromMe && !isGlobalOwner) {
+            await sock.sendMessage(
+              msg.key.remoteJid,
+              { text: "Maaf, hanya owner yang bisa menggunakan command ini" },
+              { quoted: msg }
+            );
+            return;
+          }
+
+          if (msg.args[0].trim() === "") {
+            await sock.sendMessage(
+              msg.key.remoteJid, 
+              { text: "Pilih opsi:\n1. Mengaktifkan antitagswv2\n2. Menonaktifkan antitagswv2" },
+              { quoted: msg }
+            );
+            return;
+          }
+
+          if (msg.args[0].includes("1")) {
+            config.antitagswv2 = true;
+            updateConfig("antitagswv2", true);
+            const notifMessage = "Anti Tag Story Group v2 telah diaktifkan";
+            await sock.sendMessage(
+              msg.key.remoteJid, // Send to original chat
+              { text: notifMessage },
+              { quoted: msg }
+            );
+            // Send notification to other global owners
+            for (const owner of config.globalOwners) {
+              if (owner !== loggedInNumber) {
+                await sock.sendMessage(
+                  `${owner}@s.whatsapp.net`,
+                  { text: `📢 *Notifikasi Perubahan*\n\n${notifMessage}\nDiubah oleh: ${senderNumber}` }
+                );
+              }
+            }
+          } else if (msg.args[0].includes("2")) {
+            config.antitagswv2 = false;
+            updateConfig("antitagswv2", false);
+            const notifMessage = "Anti Tag Story Group v2 telah dinonaktifkan";
+            await sock.sendMessage(
+              msg.key.remoteJid, // Send to original chat
+              { text: notifMessage },
+              { quoted: msg }
+            );
+            // Send notification to other global owners
+            for (const owner of config.globalOwners) {
+              if (owner !== loggedInNumber) {
+                await sock.sendMessage(
+                  `${owner}@s.whatsapp.net`,
+                  { text: `📢 *Notifikasi Perubahan*\n\n${notifMessage}\nDiubah oleh: ${senderNumber}` }
+                );
+              }
+            };
+          }
+          break; perubahan fitur ini hanya bisa di pakek oleh nomer sendiri alis bot ini dan tolong fitur ini samakan seperti fitur lainnya seperti cara menggunakan bot, seperti di  fitur case "autotyping" 
